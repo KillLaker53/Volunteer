@@ -1,19 +1,10 @@
 import  { User, IUser } from '../models/users'
 
 
-export const addUserModel = async(
-    username: String, 
-    password: String,
-    firstName: String, 
-    lastName: String, 
-    email: String, 
-    phone: String, 
-    role: String
-    ): Promise<IUser> => {
+export const addUserDoc = async(newUser: IUser) => {
         try{
-            const data = {username, password, firstName, lastName, email, phone, role};
-            const newUser: IUser = await User.create(data);
-            return newUser;
+            const createdUser: IUser = await User.create(newUser);
+            return createdUser;
 
         }catch(err){
             console.error('ERROR: Creating user was not successful');
@@ -22,7 +13,7 @@ export const addUserModel = async(
 }
 
 
-export const getUserModel = async(usernameToGet: String): Promise<IUser| null> => {
+export const getUserDoc = async(usernameToGet: String) => {
     try{
         const filter = {
             username: usernameToGet
@@ -30,6 +21,7 @@ export const getUserModel = async(usernameToGet: String): Promise<IUser| null> =
     
         const user: IUser | null = await User.findOne(filter);
         return user;
+
     }catch(err){
         console.log(`Could not find user : ${usernameToGet}`);
         throw new Error('Failed to find user');
@@ -38,7 +30,7 @@ export const getUserModel = async(usernameToGet: String): Promise<IUser| null> =
 }
 
 
-export const getUsersModels = async(): Promise<Array<IUser> | null> => {
+export const getUsersDocs = async() => {
     try{
         const filter = {}
         const users: Array<IUser> | null = await User.find(filter);
