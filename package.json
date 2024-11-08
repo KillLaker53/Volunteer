@@ -2,7 +2,6 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-
   "scripts": {
     "preinstall": "node checkNodeVersion",
     "prestart": "node checkNodeVersion",
@@ -11,11 +10,12 @@
     "prod": "node ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-
   "dependencies": {
+    "@types/joi": "^17.2.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "joi": "^17.13.3",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.0",
     "os-utils": "^0.0.14"
