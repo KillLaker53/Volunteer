@@ -1,7 +1,7 @@
 import  { User, IUser } from '../models/users'
 
 
-export const addUserDoc = async(newUser: IUser) => {
+export const createUser = async(newUser: IUser) => {
         try{
             const createdUser: IUser = await User.create(newUser);
             return createdUser;

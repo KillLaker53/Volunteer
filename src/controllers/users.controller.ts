@@ -1,28 +1,28 @@
 import { Request, Response, NextFunction } from 'express'
-import { addUserDoc, getUserDoc, getUsersDocs} from '../services/user.service'
+import { createUser, getUserDoc, getUsersDocs} from '../services/user.service'
 import { IUser } from '../models/users'
-import { userValidationSchema } from '../validators/users.validator'
 
-export const createUser = async(req:Request, res: Response, next:NextFunction): Promise<void> => {
+export const registerUser = async(req: Request, res: Response, next:NextFunction)=> {
     try{
-
-        const {error, value } = userValidationSchema.validate(req.body, {abortEarly: false});
-        if(error){
-            res.status(400).json({
-                error: error.details.map(detail => detail.message)
-            });
+        
+        const userData: IUser = {
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            phone: req.body.phone,
+            role: req.body.role
         }
 
-        const validatedUserData = value as IUser;
-
-        const createdUser: IUser = await addUserDoc(validatedUserData);  
+        const createdUser: IUser = await createUser(userData);  
         res.status(201).json(createdUser); 
     }catch(err){
         next(err);
     }
 }
 
-export const getUser = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userData: IUser | null = await getUserDoc(req.body.username);
         res.status(200).json(userData);
@@ -32,7 +32,7 @@ export const getUser = async(req: Request, res: Response, next: NextFunction): P
 }
 
 
-export const getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const usersData: Array<IUser> | null = await getUsersDocs();
         res.status(200).json(usersData);
