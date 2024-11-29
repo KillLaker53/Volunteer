@@ -16,18 +16,18 @@ export const registerUser = async(req: Request, res: Response, next:NextFunction
         }
 
         const createdUser: IUser = await createUser(userData);  
-        res.status(201).json(createdUser); 
+        return res.status(201).json(createdUser); 
     }catch(err){
-        next(err);
+        return res.status(500).json({message: err});
     }
 }
 
 export const getUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userData: IUser | null = await getUserDoc(req.body.username);
-        res.status(200).json(userData);
+        return res.status(200).json(userData);
     }catch(err){
-        next(err);
+        return res.status(500).json({message: err});
     }
 }
 
@@ -35,7 +35,7 @@ export const getUser = async(req: Request, res: Response, next: NextFunction) =>
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const usersData: Array<IUser> | null = await getUsersDocs();
-        res.status(200).json(usersData);
+        return res.status(200).json(usersData);
     }catch(err){
         next(err);
     }
