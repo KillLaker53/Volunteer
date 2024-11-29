@@ -1,4 +1,5 @@
 import { model, Schema, Model } from "mongoose";
+import { UserRole } from "../types/types";
 
 export interface IUser{
     username: String;
@@ -7,7 +8,7 @@ export interface IUser{
     lastName: String;
     email: String;
     phone: String;
-    role: String;
+    role: UserRole;
 }
 
 export type UserModel = Model<IUser>;
