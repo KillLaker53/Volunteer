@@ -2,6 +2,7 @@
     "compilerOptions": {
       "lib": ["es2021"],
       "module": "commonjs",
+      "moduleResolution": "node",
       "target": "es2021",
   
       "allowJs": true,
