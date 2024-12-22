@@ -16,13 +16,14 @@ export const validateEventFields = [
         return true
     }),
     
-    body('startDate').isDate(),
+    body('startDate').isISO8601(),
     
-    body('endDate').isDate().custom((endDate, { req }) => {
+    body('endDate').isISO8601().custom((endDate, { req }) => {
         const startDate = new Date(req.body.startDate);
         if(new Date(endDate) < startDate){
             throw new Error('End date must be after the starting date');
         }
+        return true;
     }),
     
     body('requirements').isArray(),
@@ -33,13 +34,14 @@ export const validateEventFields = [
         if(!isValidLocation(value)){
             throw new Error('The location is invalid');
         }
-
+        return true;
     }),
 
     body('status').custom((value) => {
         if(!Object.values(Status).includes(value)){
             throw new Error(`Event must have a status of ${Object.values(Status).join(', ')}`)
         }
+        return true;
     }),
 
 ];
@@ -52,6 +54,7 @@ export const checkIfEventExists = async(req: Request, res: Response, next: NextF
 
         if(event){
             res.status(400).json({message: "This event already exists"});
+            return;
         } 
 
     }catch(err){
@@ -63,12 +66,15 @@ export const checkIfEventExists = async(req: Request, res: Response, next: NextF
 
 export const isValidLocation = async(location: any) => {
     if(!location || location.type !== 'Point'){
+        console.log("invalid type");
         return false;
     }   
     if(!Array.isArray(location.coordinates)){
+        console.log("invalid array");
         return false;
     }
     if(location.coordinates.length !== 2){
+        console.log("invalid size");
         return false;
     }
 
@@ -78,9 +84,10 @@ export const isValidLocation = async(location: any) => {
         latitude > 90 ||
         latitude < -90
     ){
+        console.log("invalid long");
         return false;
     }
-
+    console.log("asd");
     return true;
 
 }

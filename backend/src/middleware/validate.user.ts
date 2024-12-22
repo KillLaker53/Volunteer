@@ -21,7 +21,7 @@ export const checkIfUserExists = async(req:Request, res: Response, next: NextFun
             res.status(400).json({message: "A user with this email already exists"});
         }
     }catch(err){
-        res.status(400).json({message: "An error occurred while checking if the user exists"});
+        res.status(500).json({message: "An error occurred while checking if the user exists"});
     }
 
     next();

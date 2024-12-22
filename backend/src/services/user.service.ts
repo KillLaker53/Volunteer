@@ -36,7 +36,6 @@ export const getUsersDocs = async() => {
         const users: Array<IUser> | null = await User.find(filter);
         return users;
     }catch(err){
-        console.log('No users found');
         throw new Error('Failed to find all users');
     }
 }
