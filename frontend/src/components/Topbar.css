@@ -1,0 +1,7 @@
+.top-bar {
+    position: fixed;
+    height: 100px;
+    width: 100%;
+    background-color: white;
+    border-bottom:2px solid orange;
+}
