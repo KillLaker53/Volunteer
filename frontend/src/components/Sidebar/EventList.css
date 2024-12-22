@@ -1,0 +1,17 @@
+.eventList {
+    border-top: 1px solid gray;
+    margin-top: auto;
+    position: relative;
+    padding: 50px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    height: calc(100% - 50px);
+    list-style-type: none;
+    align-self: center;
+    align-content: center;
+    justify-content: flex-start;
+    background-color: white;
+  }
