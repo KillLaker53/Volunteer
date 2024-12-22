@@ -66,15 +66,12 @@ export const checkIfEventExists = async(req: Request, res: Response, next: NextF
 
 export const isValidLocation = async(location: any) => {
     if(!location || location.type !== 'Point'){
-        console.log("invalid type");
         return false;
     }   
     if(!Array.isArray(location.coordinates)){
-        console.log("invalid array");
         return false;
     }
     if(location.coordinates.length !== 2){
-        console.log("invalid size");
         return false;
     }
 
@@ -84,10 +81,9 @@ export const isValidLocation = async(location: any) => {
         latitude > 90 ||
         latitude < -90
     ){
-        console.log("invalid long");
         return false;
     }
-    console.log("asd");
+
     return true;
 
 }
