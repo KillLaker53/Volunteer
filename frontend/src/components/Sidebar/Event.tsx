@@ -1,9 +1,9 @@
 import React from "react";
-import { SidebarEvent } from '../../types/SidebarEvent';
+import { SidebarEventDto } from 'types-api-volunteer/src/index';
 import "./Sidebar.css"
 
 interface EventProps {
-    event: SidebarEvent;
+    event: SidebarEventDto;
 } 
 
 const Event: React.FC<EventProps> = ({event}) => {

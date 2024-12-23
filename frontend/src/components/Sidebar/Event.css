@@ -14,8 +14,8 @@
 }
 
 .event:hover {
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
-    border-color: grey; /* Keep light grey border */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); 
+    border-color: grey; 
   }
 
 .event-title {
@@ -35,13 +35,4 @@
     font-size: 12px;
     color: #007bff;
     margin: 4px 0;
-}
-.event-status {
-    font-weight: 500;
-    color: #4caf50; /* Green for ongoing */
-}
-
-.event-status::before {
-    content: '• ';
-    color: #4caf50;
 }

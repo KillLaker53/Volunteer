@@ -58,7 +58,6 @@ export const removeVolunteerFromEvent = async(req: Request, res: Response, next:
 
 export const getEvents = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        console.log("here15124");
         const events = await getEventsDocs();
         res.status(200).json(events);
     }catch(err){

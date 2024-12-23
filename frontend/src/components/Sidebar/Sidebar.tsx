@@ -1,13 +1,13 @@
 import React from 'react';
 import './Sidebar.css';
 import { IoClose } from "react-icons/io5";
-import { SidebarEvent } from '../../types/SidebarEvent';
+import {SidebarEventDto} from 'types-api-volunteer/src/index';
 import EventList from './EventList';
 
 
 
 interface SidebarProps {
-  events: SidebarEvent[]; // Array of event objects
+  events: SidebarEventDto[]; 
   onClose: () => void;
 }
 

@@ -82,7 +82,6 @@ export const getEventsDocs = async() => {
     try{
         const filter = {};
         const events = await Event.find(filter);
-        console.log("here");
         const transformedEvents = events.map(event => ({
             id: event.id,
             eventName: event.eventName,

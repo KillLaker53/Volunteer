@@ -1,10 +1,10 @@
 import React from 'react';
-import { SidebarEvent } from '../../types/SidebarEvent';
 import Event from './Event';
 import "./EventList.css"
+import { SidebarEventDto } from 'types-api-volunteer/src';
 
 interface EventListProps{
-    events: SidebarEvent[];
+    events: SidebarEventDto[];
 }
 
 
