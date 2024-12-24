@@ -1,4 +1,4 @@
-import { SidebarEvent } from '../types/SidebarEvent';
+import { SidebarEventDto, EventLocationDto } from 'types-api-volunteer/src/index';
 
 
 
@@ -9,11 +9,20 @@ export const fetchEvents = async() => {
         if(!response.ok){
             throw new Error('Failed to fetch events');
         }
-        const events: SidebarEvent[] = await response.json();
-    
+        const events: SidebarEventDto[] = await response.json();
         return events;
     } catch(error){
         console.error("Error while fetching data", error);
         throw error;
     }
+}
+
+export const fetchEventCoordinates = (events: SidebarEventDto[]): EventLocationDto[] => {
+    return events.map((event) => {
+        return {
+            type: event.eventType,
+            longitude: event.location[0],
+            latitude: event.location[1]
+        }
+    })
 }
