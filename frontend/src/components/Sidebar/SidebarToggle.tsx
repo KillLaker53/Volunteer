@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { VscTriangleLeft } from "react-icons/vsc";
 import Sidebar from './Sidebar';
-import { fetchEvents } from '../../api/EventFetching';
-import { SidebarEvent } from '../../types/SidebarEvent';
+import { SidebarEventDto } from 'types-api-volunteer/src/index';
 import "../../App.css"
 
 interface SidebarToggleProps {
@@ -10,6 +9,7 @@ interface SidebarToggleProps {
   sidebarVisible: boolean;
   onArrowClick: () => void;
   onSidebarClose: () => void;
+  events: SidebarEventDto[],
 }
 
 const SidebarToggle: React.FC<SidebarToggleProps> = ({
@@ -17,23 +17,8 @@ const SidebarToggle: React.FC<SidebarToggleProps> = ({
   sidebarVisible,
   onArrowClick,
   onSidebarClose,
+  events,
 }) => {
-  const [events, setEvents] = useState<SidebarEvent[]>([]);
-
-  useEffect(() => {
-    const loadEvents = async() => {
-      try{
-        const fetchedEvents = await fetchEvents();
-        setEvents(fetchedEvents);
-      }catch(err){
-
-      } 
-    }
-
-    if(sidebarVisible){
-      loadEvents();
-    }
-  }, [sidebarVisible]);
 
   return (
     <>
