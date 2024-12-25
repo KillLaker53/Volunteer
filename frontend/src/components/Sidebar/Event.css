@@ -3,36 +3,37 @@
     min-width: fit-content;
     min-height: fit-content;
     height: 300px;
-    border: 2px solid lightgrey;
-    flex-shrink: 0;
-    background-color: #fab964;
-    border-radius: 15px;
-    border-radius: 15px; 
+    border: 2px solid #e0e0e0;
+    background-color: #f9c77e;
+    border-radius: 20px; 
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    font-family: Arial, sans-serif;
-    color: #333; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .event:hover {
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); 
-    border-color: grey; 
-  }
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+    border-color: #d1d1d1; 
+}
 
 .event-title {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 10px;
-    color: #2e3a59;
+    margin-bottom: 15px;
+    color: #1a2940;
 }
 
 .event-type, .event-status {
-    font-size: 14px;
-    margin: 4px 0;
-    color: #636c75;
+    font-size: 18px;
+    margin: 6px 0;
+    color: #495057;
 }
 
 .event-dates {
-    font-size: 12px;
-    color: #007bff;
-    margin: 4px 0;
+    font-size: 16px;
+    color: #0056b3;
+    margin: 6px 0;
 }
