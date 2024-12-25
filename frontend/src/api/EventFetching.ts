@@ -20,6 +20,7 @@ export const fetchEvents = async() => {
 export const fetchEventCoordinates = (events: SidebarEventDto[]): EventLocationDto[] => {
     return events.map((event) => {
         return {
+            id: event.id,
             type: event.eventType,
             longitude: event.location[0],
             latitude: event.location[1]

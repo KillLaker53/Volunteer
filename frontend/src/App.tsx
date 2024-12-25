@@ -1,27 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import "leaflet/dist/leaflet.css";
-import { SidebarEventDto } from 'types-api-volunteer/src';
+import { EventLocationDto, SidebarEventDto } from 'types-api-volunteer/src';
 import { fetchEventCoordinates, fetchEvents } from './api/EventFetching';
-import Topbar from './components/Topbar';
+import Header from './components/Header';
 import MapComponent from './components/MapComponent';
 import SidebarToggle from './components/Sidebar/SidebarToggle';
 
 function App() {
-  const [sidebarVisible, setSidebarVisible] = useState<boolean>(false);
-  const [arrowVisible, setArrowVisible] = useState<boolean>(true);
   const [events, setEvents] = useState<SidebarEventDto[]>([]);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(true);
-    setArrowVisible(false);
-  };
-
-  const closeSidebar = () => {
-    setSidebarVisible(false);
-    setArrowVisible(true);
-  };
-
+  const [selectedEvent, setSelectedEvent] = useState<EventLocationDto| undefined>();
   useEffect(() => {
     const loadEvents = async () => {
       try {
@@ -31,25 +19,27 @@ function App() {
         console.error("Failed to load events:", err);
       }
     };
-   
     loadEvents();
   }, []); 
 
-  const locationEvents = fetchEventCoordinates(events);
+  const mapEvents = fetchEventCoordinates(events);
+
+  const handleEventClick = (sidebarEvent: SidebarEventDto) => {
+    const mapEvent = mapEvents.find((event) => {
+      return event.id === sidebarEvent.id;
+    })
+    if(mapEvent){
+      setSelectedEvent(mapEvent);
+    }
+    console.log(selectedEvent);
+  }
 
   return (
     <div className='homepage'>
-      <Topbar />
+      <Header />
       <div className='content'>
-        
-        <MapComponent events={locationEvents} />
-        <SidebarToggle
-          arrowVisible={arrowVisible}
-          sidebarVisible={sidebarVisible}
-          onArrowClick={toggleSidebar}
-          onSidebarClose={closeSidebar}
-          events={events}
-        />
+        <MapComponent events={mapEvents} selectedEvent={selectedEvent}/>
+        <SidebarToggle events={events} onEventClick={handleEventClick}/>
       </div>
     </div>
   );

@@ -1,34 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { VscTriangleLeft } from "react-icons/vsc";
 import Sidebar from './Sidebar';
 import { SidebarEventDto } from 'types-api-volunteer/src/index';
 import "../../App.css"
 
 interface SidebarToggleProps {
-  arrowVisible: boolean;
-  sidebarVisible: boolean;
-  onArrowClick: () => void;
-  onSidebarClose: () => void;
   events: SidebarEventDto[],
+  onEventClick: (event: SidebarEventDto) => void;
 }
 
-const SidebarToggle: React.FC<SidebarToggleProps> = ({
-  arrowVisible,
-  sidebarVisible,
-  onArrowClick,
-  onSidebarClose,
-  events,
-}) => {
+const SidebarToggle: React.FC<SidebarToggleProps> = ({events, onEventClick}) => {
+  const [sidebarVisible, setSidebarVisible] = useState<boolean>(false);
+  const [arrowVisible, setArrowVisible] = useState<boolean>(true);
+ 
+
+  const onArrowClick = () => {
+    setSidebarVisible(true);
+    setArrowVisible(false);
+  };
+
+  const onCloseSidebar = () => {
+    setSidebarVisible(false);
+    setArrowVisible(true);
+  };
 
   return (
     <>
-      {arrowVisible && (
+      {arrowVisible && 
         <VscTriangleLeft
           id='sidebar-arrow'
           onClick={onArrowClick}
         />
-      )}
-      {sidebarVisible && <Sidebar events={events} onClose={onSidebarClose} />}
+      }
+      {sidebarVisible && <Sidebar events={events} onClose={onCloseSidebar} onEventClick={onEventClick}/>}
     </>
   );
 };
