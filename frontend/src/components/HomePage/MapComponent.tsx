@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker,  } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { EventLocationDto } from 'types-api-volunteer/src';
 import "./MapComponent.css";
-import { getEventIcon } from "../library/utils";
+import { getEventIcon } from "../../library/utils";
 
 interface MapComponentProps {
   events: EventLocationDto[];

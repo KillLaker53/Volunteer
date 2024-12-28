@@ -1,7 +1,5 @@
 import { SidebarEventDto, EventLocationDto } from 'types-api-volunteer/src/index';
 
-
-
 export const fetchEvents = async() => {
     try{
    

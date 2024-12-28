@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { VscTriangleLeft } from "react-icons/vsc";
 import Sidebar from './Sidebar';
 import { SidebarEventDto } from 'types-api-volunteer/src/index';
-import "../../App.css"
+import "../HomePage.css"
 
 interface SidebarToggleProps {
   events: SidebarEventDto[],
