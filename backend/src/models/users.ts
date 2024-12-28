@@ -2,12 +2,12 @@ import { model, Schema, Model } from "mongoose";
 import { UserRole } from "../types/types";
 
 export interface IUser{
-    username: String;
-    password: String;
-    firstName: String;
-    lastName: String;
-    email: String;
-    phone: String;
+    username: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
     role: UserRole;
 }
 
