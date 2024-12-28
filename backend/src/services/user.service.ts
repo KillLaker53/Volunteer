@@ -12,21 +12,16 @@ export const createUser = async(newUser: IUser) => {
         }
 }
 
-
-export const getUserDoc = async(usernameToGet: String) => {
+export const getUser = async(userEmail: string, userPassword: string ) => {
     try{
         const filter = {
-            username: usernameToGet
-        };
-    
+            email: userEmail,
+        }
         const user: IUser | null = await User.findOne(filter);
         return user;
-
-    }catch(err){
-        console.log(`Could not find user : ${usernameToGet}`);
+    } catch(err) {
         throw new Error('Failed to find user');
     }
-    
 }
 
 
