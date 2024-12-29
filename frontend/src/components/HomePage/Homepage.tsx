@@ -3,7 +3,7 @@ import './HomePage.css';
 import "leaflet/dist/leaflet.css";
 import { EventLocationDto, SidebarEventDto } from 'types-api-volunteer/src';
 import { fetchEventCoordinates, fetchEvents } from '../../api/EventApi';
-import Header from './Header';
+import Header from '../Header';
 import MapComponent from './MapComponent';
 import SidebarToggle from './Sidebar/SidebarToggle';
 
@@ -11,6 +11,8 @@ import SidebarToggle from './Sidebar/SidebarToggle';
 const HomePage = () => {
     const [events, setEvents] = useState<SidebarEventDto[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<EventLocationDto| undefined>();
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
     useEffect(() => {
       const loadEvents = async () => {
         try {
@@ -21,6 +23,9 @@ const HomePage = () => {
         }
       };
       loadEvents();
+      const token = localStorage.getItem('token');
+      setIsLoggedIn(!!token);
+    
     }, []); 
   
     const mapEvents = fetchEventCoordinates(events);
@@ -37,7 +42,7 @@ const HomePage = () => {
   
     return (
       <div className='homepage'>
-        <Header />
+        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
         <div className='content'>
           <MapComponent events={mapEvents} selectedEvent={selectedEvent}/>
           <SidebarToggle events={events} onEventClick={handleEventClick}/>
