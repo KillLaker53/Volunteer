@@ -1,0 +1,28 @@
+.header {
+    position: relative;
+    height: 100px;
+    width: 100%;
+    background-color: white;
+    border-bottom: 2px solid orange;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 1%;
+}
+
+.logo {
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: orange;
+}
+
+.logo:hover {
+    color: #007bff;
+}
+
+.button-container{
+    display:flex;
+    gap: 8px;
+}

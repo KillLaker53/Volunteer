@@ -15,3 +15,4 @@ export const earthquakeIcon = new Icon({
   iconSize: [45, 45]
 });
   
+export const myProfileIcon = require("../images/myprofile.png");
