@@ -1,21 +1,24 @@
 .button {
-    background-color: #ff8800; 
-    color: #fff; 
+    background-color: #ff8800;
+    color: #fff;
     font-size: 20px;
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 8px; 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    top: 50%;
-    right: 5%;
-    transform: translateY(-50%);
-    position: absolute;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.button-icon {
+    width: 25px;
+    height: 25px;
 }
 
 .button:hover {
-    background-color: #e67600; 
+    background-color: #e67600;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
-
