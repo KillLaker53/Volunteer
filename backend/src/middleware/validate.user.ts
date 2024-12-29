@@ -4,12 +4,11 @@ import { IUser, User } from '../models/users';
 
 export const validateUserFields = [
     body('username').notEmpty().isString(),
-    body('password').isLength({min: 9}).isString(),
+    body('password').isLength({min: 4}).isString(),
     body('firstName').notEmpty().isString(),
     body('lastName').notEmpty().isString(),
     body('email').isEmail().isString(),
     body('phone').isMobilePhone('bg-BG').isString(),
-    body('role').notEmpty().isString(),
 ];
 
 

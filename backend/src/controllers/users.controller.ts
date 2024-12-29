@@ -1,22 +1,25 @@
 import { Request, Response, NextFunction } from 'express'
-import { createUser, getUser, getUsersDocs} from '../services/user.service'
+import { createUser, determineUserRole, getUser, getUsersDocs} from '../services/user.service'
 import { IUser } from '../models/users'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { SECRET_KEY } from '../constants'
 
+
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const email = req.body.email;
+        const role = determineUserRole(email);
 
         const userData: IUser = {
             username: req.body.username,
             password: hashedPassword,
-            email: req.body.email,
+            email: email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             phone: req.body.phone,
-            role: req.body.role,
+            role: role,
         };
 
         const createdUser: IUser = await createUser(userData);
@@ -32,6 +35,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
         res.status(201).json({
             message: "User registered successfully",
+            createdUser,
             token,
         });
 

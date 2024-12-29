@@ -1,4 +1,6 @@
+import { ADMIN_EMAIL } from '../constants';
 import  { User, IUser } from '../models/users'
+import { UserRole } from '../types/types';
 
 
 export const createUser = async(newUser: IUser) => {
@@ -35,3 +37,16 @@ export const getUsersDocs = async() => {
     }
 }
 
+export const determineUserRole = (email: string) => {
+            
+    let role: UserRole = UserRole.Volunteer;
+
+    if(email.endsWith("@elsys-bg.org")){
+        role = UserRole.Organization;
+    }
+
+    if (ADMIN_EMAIL && new RegExp(ADMIN_EMAIL).test(email)) {
+        role = UserRole.Admin;
+    }
+    return role;
+}

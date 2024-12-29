@@ -7,7 +7,12 @@ export enum Status{
     Finished = 'Finished',
 };
 
-export type UserRole = 'Volunteer' | 'Admin';
+export enum UserRole {
+    Volunteer = 'volunteer',
+    Organization = 'organization',
+    Admin = 'admin'
+};
+
 export type Location = {
     type: 'Point';
     coordinates: [Number, Number];
