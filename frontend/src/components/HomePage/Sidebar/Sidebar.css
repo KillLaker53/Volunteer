@@ -12,18 +12,29 @@
   z-index: 5000;
 }
 
-#sidebar-title {
-  height: fit-content;
-  position: fixed;
-  align-self: center;
+.sidebar-header {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 0 20px; 
+  border-bottom: 1px solid gray; 
 }
 
 .close-button {
-  margin-left: 10px;
-  position: fixed;
   background-color: transparent;
   border: none;
-  width: fit-content;
   font-size: 30px;
-  height: fit-content;
+  cursor: pointer;
+  z-index: 10; 
+}
+
+.close-button:hover {
+  color: red; 
+}
+
+#sidebar-title {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1; 
 }
