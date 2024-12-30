@@ -34,7 +34,6 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         );
 
         res.status(201).json({
-            message: "User registered successfully",
             createdUser,
             token,
         });
@@ -73,7 +72,7 @@ export const loginUser = async(req: Request, res: Response, next: NextFunction) 
         );
 
         res.status(200).json({
-            message: "Successfully logged in!",
+            user,
             token
         })
         
