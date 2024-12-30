@@ -19,3 +19,27 @@ export const loginUser = async(email: string, password: string) => {
 
     return response_data;
 }
+
+export const registerUser = async(
+    username: string,
+    password: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone: string,
+) => {
+    const response = await fetch('http://localhost:5000/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username, password, email, firstName, lastName, phone})
+    });
+
+    if(!response.ok){
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+    const response_data: AuthenticatedResponseDto<UserDto> = await response.json();
+    return response_data;
+}
