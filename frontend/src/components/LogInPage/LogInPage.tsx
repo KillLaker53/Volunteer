@@ -25,6 +25,10 @@ const LogInPage = () => {
       setEmail('');
       setPassword('');
       localStorage.setItem('token', response.token);
+
+      const userData = JSON.stringify(response.data);
+      localStorage.setItem('userData', userData);
+      
       navigate('/');
 
     } catch (err) {

@@ -1,3 +1,4 @@
+import { HydratedDocument } from 'mongoose';
 import { ADMIN_EMAIL } from '../constants';
 import  { User, IUser } from '../models/users'
 import { UserRole } from '../types/types';
@@ -5,7 +6,7 @@ import { UserRole } from '../types/types';
 
 export const createUser = async(newUser: IUser) => {
         try{
-            const createdUser: IUser = await User.create(newUser);
+            const createdUser: HydratedDocument<IUser> = await User.create(newUser);
             return createdUser;
 
         }catch(err){
@@ -14,12 +15,16 @@ export const createUser = async(newUser: IUser) => {
         }
 }
 
-export const getUser = async(userEmail: string, userPassword: string ) => {
+export const getUser = async(userEmail: string, userPassword: string ): Promise<HydratedDocument<IUser> | null> => {
     try{
         const filter = {
             email: userEmail,
         }
-        const user: IUser | null = await User.findOne(filter);
+        const user = await User.findOne(filter);
+        if(!user){
+            return null;
+        }
+        
         return user;
     } catch(err) {
         throw new Error('Failed to find user');

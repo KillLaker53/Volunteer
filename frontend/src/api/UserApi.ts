@@ -16,7 +16,7 @@ export const loginUser = async(email: string, password: string) => {
     }
     
     const response_data: AuthenticatedResponseDto<UserDto> = await response.json();
-
+    
     return response_data;
 }
 

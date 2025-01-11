@@ -22,20 +22,21 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
             role: role,
         };
 
-        const createdUser: IUser = await createUser(userData);
+        const createdUser = await createUser(userData);
 
         const token = jwt.sign(
             {
+                id: createdUser._id.toString(),
                 email: createdUser.email,
                 role: createdUser.role,
             },
             SECRET_KEY, 
             { expiresIn: "1h" }
         );
-
+        const data = createdUser;
         res.status(201).json({
-            createdUser,
             token,
+            data
         });
 
     } catch (err: any) {
@@ -50,7 +51,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 export const loginUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const {email, password} = req.body;
-        const user: IUser | null = await getUser(email, password); 
+        const user = await getUser(email, password); 
         
         if(!user){
             res.status(400).json({message: "This user does not exist"});
@@ -58,12 +59,14 @@ export const loginUser = async(req: Request, res: Response, next: NextFunction) 
         }
     
         const isPasswordValid = await bcrypt.compare(password, user.password);
+        
         if(!isPasswordValid){
             res.status(400).json({message: "Invalid password"});
         }
-    
+        const data = user;
         const token = jwt.sign(
             {
+                id: user._id.toString(),
                 email: user.email,
                 role: user.role,
             },
@@ -72,8 +75,8 @@ export const loginUser = async(req: Request, res: Response, next: NextFunction) 
         );
 
         res.status(200).json({
-            user,
-            token
+            token,
+            data
         })
         
     }catch(err) {
