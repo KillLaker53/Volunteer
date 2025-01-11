@@ -37,7 +37,7 @@ export const fetchEvent = async(eventId: string) => {
         });
 
         if(!response.ok){
-            throw new Error(`Http error with statuss ${response.status}`);
+            throw new Error(`Http error with status ${response.status}`);
         }
         
         const event: EventPageDto = await response.json();
@@ -50,6 +50,24 @@ export const fetchEvent = async(eventId: string) => {
 
 }
 
-export const signUpForEvent = async(userId: string) => {
-    
+export const signUpForEvent = async(userId: string, eventId: string) => {
+    try{
+        const response = await fetch('http://localhost:5000/api/signForEvent', 
+            {
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({userId, eventId}),
+            }
+        )
+
+        if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData);
+        }
+
+    }catch(err){
+
+    }
 }

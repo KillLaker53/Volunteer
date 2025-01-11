@@ -20,7 +20,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({event}) => {
                     className="event-description-img" />
                 <div>
                     <p className="event-description-label">Date:</p>
-                    <p className="event-description-info">January 15, 2025</p>
+                    <p className="event-description-info">{event.date}</p>
                 </div>
             </div>
             <div className="event-description-item">

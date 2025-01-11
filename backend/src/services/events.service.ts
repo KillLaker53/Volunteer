@@ -2,6 +2,8 @@ import { User, IUser} from '../models/users';
 import { Event, IEvent} from '../models/events';
 import { Types } from 'mongoose';
 import { Location } from '../types/types';
+import { SidebarEventDto, EventPageDto } from 'types-api-volunteer/src/index';
+import { formatDateRange } from '../library/utils';
 
 export const createEventDoc = async(event: IEvent) => {
     try{
@@ -15,7 +17,7 @@ export const createEventDoc = async(event: IEvent) => {
     }
 }
 
-export const addUserToEvent = async(volunteerId: Types.ObjectId, eventId: Types.ObjectId) => {
+export const addUserToEvent = async(volunteerId: string, eventId: string) => {
     try{
         const result = await Event.updateOne(
             {_id: eventId},
@@ -81,7 +83,6 @@ export const getEventsDocs = async() => {
             location: event.location.coordinates,
             status: event.status
         }));
-        console.log(transformedEvents);
         return transformedEvents;
     }catch(err){
         throw new Error("Could not load events");
@@ -95,9 +96,26 @@ export const getEventDoc = async(eventId: string) => {
         }
 
         const event = await Event.findOne(filter);
-        return event;
+        if(!event){
+            throw new Error('No such event exists');
+        }
+        const date: string = formatDateRange(event.startDate, event.endDate);
+
+        const transformedEvent: EventPageDto = {
+            id: event.id,
+            eventName: event.eventName,
+            eventType: event.eventType,
+            date: date,
+            address: event.address,
+            description: event.description,
+            requirements: event.requirements,
+            funding: event.fundingNeeded,
+            status: event.status
+        };
+        
+        return transformedEvent;
     }catch(err){
-        throw new Error("Could not load events")
+        throw new Error("Could not load event")
     }
 }
 

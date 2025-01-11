@@ -33,8 +33,7 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
 
 export const addVolunteerToEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
-       
-        const volunteerId = req.body.volunteerId;
+        const volunteerId = req.body.userId;
         const eventId = req.body.eventId; 
         const updatedEvent = await addUserToEvent(volunteerId, eventId);
         res.status(201).json(updatedEvent);

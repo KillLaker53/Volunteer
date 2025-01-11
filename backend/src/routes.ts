@@ -1,9 +1,9 @@
 import express from 'express';
 import { getUsers, loginUser, registerUser } from './controllers/users.controller';
-import { validateUserFields, checkIfUserExists } from './middleware/validate.user';
+import { validateUserFields, checkIfUserExists, validateJwtToken } from './middleware/validate.user';
 import { validateEventFields, checkIfEventExists } from './middleware/validate.event';
 import { handleValidationResult } from './middleware/handle.validation.result';
-import { createEvent, getEvent, getEvents } from './controllers/events.controller';
+import { addVolunteerToEvent, createEvent, getEvent, getEvents } from './controllers/events.controller';
 
 const routes = express.Router();
 
@@ -19,5 +19,6 @@ routes.get('/api/getEvent', getEvent);
 
 routes.get('/api/getEvents', getEvents);
 
+routes.post('/api/signForEvent', addVolunteerToEvent);
 
 export default routes;

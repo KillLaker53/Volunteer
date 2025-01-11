@@ -28,3 +28,15 @@ export const geocodeLocation = async(address: string):Promise<Location> => {
         throw new Error("Error fetching the address to a location");
     }
 }
+
+export const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1 ).padStart(2, '0');
+    const year = date.getUTCFullYear();
+
+    return `${day}.${month}.${year}`;
+}
+
+export const formatDateRange = (startDate: Date, endDate: Date) => {
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+}

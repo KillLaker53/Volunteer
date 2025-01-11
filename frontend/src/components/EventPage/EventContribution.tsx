@@ -22,7 +22,8 @@ const EventContribution: React.FC<EventContributionProps> = ({event, isLoggedIn}
         }
         const parsedUserData: UserDto = JSON.parse(stringUserData);
         const userId = parsedUserData._id;
-        signUpForEvent(userId);
+        const eventId = event.id;
+        signUpForEvent(userId, eventId);
 
     }
 
