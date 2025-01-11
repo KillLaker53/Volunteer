@@ -16,3 +16,9 @@ export const earthquakeIcon = new Icon({
 });
   
 export const myProfileIcon = require("../images/myprofile.png");
+
+export const eventTitleBackground = require("../images/event-title-background.png");
+
+export const eventDescriptionDate = require("../images/event-description-date.png")
+
+export const eventDescriptionLocation = require("../images/event-description-location.png");

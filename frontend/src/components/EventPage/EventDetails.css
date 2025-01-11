@@ -1,0 +1,10 @@
+.event-details {
+    margin-top: 0;
+    width: 100%;
+    height: fit-content;
+    background-color: white;
+    padding-top: 5%;
+    padding-left: 30%;
+    padding-right: 30%;
+    padding-bottom: 20%;
+}

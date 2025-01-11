@@ -1,0 +1,47 @@
+
+.event-description-title {
+    font-family: fantasy;
+    font-size: 40px;
+    margin-bottom: 5%;
+}
+
+.event-description-details {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+    margin-bottom: 10%; 
+}
+
+.event-description-item {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.event-description-img {
+    width: 40px;
+    height: 40px; 
+    object-fit: cover; 
+}
+
+.event-description-label {
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.event-description-info {
+    font-family: sans-serif;
+    text-align: left;
+    font-size: 18px;
+    margin-top: 5px; 
+}
+
+.event-description-text {
+    font-family: sans-serif;
+    font-size: 20px;
+    word-spacing: 2px;
+    line-height: 2;
+    text-align: justify;
+}

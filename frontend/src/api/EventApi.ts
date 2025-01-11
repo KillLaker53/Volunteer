@@ -1,4 +1,4 @@
-import { SidebarEventDto, EventLocationDto } from 'types-api-volunteer/src/index';
+import { SidebarEventDto, EventLocationDto, EventPageDto } from 'types-api-volunteer/src/index';
 
 export const fetchEvents = async() => {
     try{
@@ -24,4 +24,32 @@ export const fetchEventCoordinates = (events: SidebarEventDto[]): EventLocationD
             latitude: event.location[1]
         }
     })
+}
+
+export const fetchEvent = async(eventId: string) => {
+    try{
+     
+        const response = await fetch(`http://localhost:5000/api/getEvent?eventId=${encodeURIComponent(eventId)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if(!response.ok){
+            throw new Error(`Http error with statuss ${response.status}`);
+        }
+        
+        const event: EventPageDto = await response.json();
+        return event;
+
+    }catch(error){
+        console.error("Error while fetching data", error);
+        throw error;
+    }
+
+}
+
+export const signUpForEvent = async(userId: string) => {
+    
 }

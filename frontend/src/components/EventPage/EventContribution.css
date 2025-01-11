@@ -1,0 +1,75 @@
+
+.event-contribution-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20%;
+}
+
+.event-contribution-title {
+    font-size: 40px;
+    font-family: fantasy;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.event-contribution-box {
+    width: 100%;
+    height: fit-content;
+    border: 2px solid orange;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch; 
+    position: relative;
+}
+
+.event-contribution-signup,
+.event-contribution-donation {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    width: 50%;
+    text-align: left;
+    position: relative; 
+}
+
+.event-contribution-signup {
+    border-right: 1px solid lightgrey; 
+}
+
+.event-contribution-box-title{
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.event-contribution-box-text{
+    display: flex;
+    width: 100%;
+    position: relative;
+    flex-grow: 1;
+    margin-bottom: 80px;
+}
+
+.event-contribution-button {
+    align-self: center;
+    position:relative;
+    width: fit-content;
+    margin: 30px;
+    padding: 12px 25px; 
+    font-size: 18px;
+    font-family: 'Arial', sans-serif; 
+    cursor: pointer;
+    background-color: #FF8C00; 
+    border: 1px solid #FF7F50;
+    border-radius: 12px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease; 
+}
+
+.event-contribution-button:hover {
+    background-color: #ec971f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
