@@ -12,7 +12,7 @@ const Event: React.FC<EventProps> = ({ event, onEventClick }) => {
     const navigate = useNavigate();
 
     const handleButtonClick = (eventId: string) => {
-        navigate(`/event/eventId=${eventId}`); 
+        navigate(`/event/${eventId}`); 
     };
 
     return (
