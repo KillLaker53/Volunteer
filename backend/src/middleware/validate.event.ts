@@ -30,12 +30,7 @@ export const validateEventFields = [
     
     body('fundingNeeded').isNumeric(),
     
-    body('location').custom((value) => {
-        if(!isValidLocation(value)){
-            throw new Error('The location is invalid');
-        }
-        return true;
-    }),
+    body('address').isString(),
 
     body('status').custom((value) => {
         if(!Object.values(Status).includes(value)){
@@ -48,17 +43,17 @@ export const validateEventFields = [
 
 export const checkIfEventExists = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const __id: Types.ObjectId = req.body.__id;
+        const eventName: Types.ObjectId = req.body.eventName;
 
-        const event: IEvent | null= await Event.findOne({id: __id});
+        const event: IEvent | null= await Event.findOne({eventName: eventName});
 
-        if(event){
+        if(event != null){
             res.status(400).json({message: "This event already exists"});
             return;
         } 
 
     }catch(err){
-        res.status(500).json({message: ""});
+        res.status(500).json({message: "ASD"});
     }
     next();
 }

@@ -1,6 +1,7 @@
 export enum EventType {
     Fire = 'Fire',
-    Flooding = 'Flooding'
+    Flooding = 'Flooding',
+    Earthquake = 'Earthquake',
 };
 export enum Status{
     Fire = 'On-Going', 
@@ -15,5 +16,5 @@ export enum UserRole {
 
 export type Location = {
     type: 'Point';
-    coordinates: [Number, Number];
+    coordinates: [number, number];
 }

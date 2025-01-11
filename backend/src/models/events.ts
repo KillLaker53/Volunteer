@@ -3,14 +3,15 @@ import mongoose, {model, Model, Schema } from 'mongoose';
 import { Location } from '../types/types';
 
 export interface IEvent {
-    eventName: String;
-    description: String;
+    eventName: string;
+    description: string;
     eventType: EventType;
     startDate: Date;
     endDate: Date;
-    requirements: Array<String>;
+    requirements: Array<string>;
+    address: string;
     location: Location;
-    fundingNeeded: Number;
+    fundingNeeded: number;
     volunteers: Array<Schema.Types.ObjectId>;
     status: Status;
 }
@@ -24,6 +25,7 @@ const EventSchema: Schema = new Schema<IEvent, EventModel>({
     startDate: {type: Date},
     endDate: {type: Date},
     requirements: {type: [String]},
+    address: {type: String},
     location: {
         type: {
             type: String,

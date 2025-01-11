@@ -15,16 +15,6 @@ export const createEventDoc = async(event: IEvent) => {
     }
 }
 
-export const getEventDoc = async(eventId: Types.ObjectId) => {
-    
-    try{
-        const event: IEvent | null = await Event.findOne({id: eventId});
-        return event;
-    }catch(err){
-        throw new Error("Failed to retrieve event");
-    }
-}
-
 export const addUserToEvent = async(volunteerId: Types.ObjectId, eventId: Types.ObjectId) => {
     try{
         const result = await Event.updateOne(
@@ -97,3 +87,17 @@ export const getEventsDocs = async() => {
         throw new Error("Could not load events");
     }
 }
+
+export const getEventDoc = async(eventId: string) => {
+    try{
+        const filter = {
+            _id: eventId,
+        }
+
+        const event = await Event.findOne(filter);
+        return event;
+    }catch(err){
+        throw new Error("Could not load events")
+    }
+}
+
