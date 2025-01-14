@@ -13,7 +13,7 @@ const EventList: React.FC<EventListProps> = ({events, onEventClick}) => {
     return(
         <ul className='eventList'>
             {events.map((event) => (
-                <Event key={event.id} event={event} onEventClick={onEventClick}/>
+                <Event key={event._id} event={event} onEventClick={onEventClick}/>
             ))}
         </ul>
     );

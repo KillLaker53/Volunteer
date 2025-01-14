@@ -32,7 +32,7 @@ const HomePage = () => {
   
     const handleEventClick = (sidebarEvent: SidebarEventDto) => {
       const mapEvent = mapEvents.find((event) => {
-        return event.id === sidebarEvent.id;
+        return event._id === sidebarEvent._id;
       })
       if(mapEvent){
         setSelectedEvent(mapEvent);

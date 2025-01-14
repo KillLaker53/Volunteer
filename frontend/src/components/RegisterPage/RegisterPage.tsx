@@ -33,8 +33,8 @@ const RegisterPage = () => {
         try{
             const response = await registerUser(formData.username, formData.password, formData.email, formData.firstName, formData.lastName, formData.phone);
             localStorage.setItem('token', response.token);
-            const userData = JSON.stringify(response.data);
-            localStorage.setItem('userData', userData);
+            const userId = JSON.stringify(response.data);
+            localStorage.setItem('userData', userId);
             navigate('/');
         }catch(err){
             setError(`${err}`);

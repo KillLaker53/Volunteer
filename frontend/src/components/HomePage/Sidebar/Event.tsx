@@ -28,7 +28,7 @@ const Event: React.FC<EventProps> = ({ event, onEventClick }) => {
                 className='event-button'
                 onClick={(e) => {
                     e.stopPropagation(); 
-                    handleButtonClick(event.id);
+                    handleButtonClick(event._id);
                 }}
             >
                 Details

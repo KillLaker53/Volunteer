@@ -13,10 +13,8 @@ const EventPage = () => {
     const { eventId } = useParams<{ eventId?: string }>();
 
     const [event, setEvent] = useState<EventPageDto | null>(null);
-
+    
     useEffect(() => {
-
-
         const fetchAndSetEvent = async () => {
             if (!eventId) {
                 setDoesEventExist(false);
@@ -26,7 +24,6 @@ const EventPage = () => {
                 const event = await fetchEvent(eventId);
                 if (event) {
                     setEvent(event);
-                    console.log(`event: ${event.eventName}`);
                     setDoesEventExist(true);
                 } else {
                     setDoesEventExist(false);
@@ -36,12 +33,11 @@ const EventPage = () => {
                 setDoesEventExist(false);
             }
         };
-
+    
         fetchAndSetEvent();
         const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
     }, [eventId]);
-
 
     if(!doesEventExist){
         return <p>No such event exists</p>;
