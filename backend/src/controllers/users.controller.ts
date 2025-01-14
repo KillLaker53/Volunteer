@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { createUser, determineUserRole, getUser, getUsersDocs} from '../services/user.service'
+import { createUser, determineUserRole, getUserByEmail, getUserDoc, getUsersDocs} from '../services/user.service'
 import { IUser } from '../models/users'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { SECRET_KEY } from '../constants'
+import { UserDto } from 'types-api-volunteer/src'
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -19,6 +20,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             phone: req.body.phone,
+            events: [],
             role: role,
         };
 
@@ -42,8 +44,10 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     } catch (err: any) {
         if (err.code === 11000) {
             res.status(400).json({ message: "Email or username already exists" });
+            return;
         } else {
             res.status(500).json({ message: err.message || "Internal Server Error" });
+            return;
         }
     }
 };
@@ -51,7 +55,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 export const loginUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const {email, password} = req.body;
-        const user = await getUser(email, password); 
+        const user = await getUserByEmail(email); 
         
         if(!user){
             res.status(400).json({message: "This user does not exist"});
@@ -62,6 +66,7 @@ export const loginUser = async(req: Request, res: Response, next: NextFunction) 
         
         if(!isPasswordValid){
             res.status(400).json({message: "Invalid password"});
+            return;
         }
         const data = user;
         const token = jwt.sign(
@@ -77,10 +82,12 @@ export const loginUser = async(req: Request, res: Response, next: NextFunction) 
         res.status(200).json({
             token,
             data
-        })
+        });
+        return;
         
     }catch(err) {
         res.status(500).json({message: "An internal server error has occurred"});
+        return;
     }
 
 }
@@ -90,7 +97,25 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
     try{
         const usersData: Array<IUser> | null = await getUsersDocs();
         res.status(200).json(usersData);
+        return;
     }catch(err){
         next(err);
     }
 } 
+
+export const getUser = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.query.userId as string;
+
+        if(!userId){
+            res.status(404).json({message: "Missing required query parameter"});
+            return;
+        }
+        const user: UserDto = await getUserDoc(userId);
+        res.status(201).json(user);
+        return;
+    }catch(err){
+        res.status(500).json({message: "An internal server error has occurred"});
+        return;
+    }
+}

@@ -1,4 +1,4 @@
-import { model, Schema, Model } from "mongoose";
+import mongoose, { model, Schema, Model } from "mongoose";
 import { UserRole } from "../types/types";
 
 export interface IUser{
@@ -9,6 +9,7 @@ export interface IUser{
     email: string;
     phone: string;
     role: UserRole;
+    events: Array<Schema.Types.ObjectId>;
 }
 
 export type UserModel = Model<IUser>;
@@ -21,6 +22,7 @@ const UserSchema: Schema = new Schema<IUser, UserModel>({
     email: { type: String},
     phone: { type: String },
     role: { type: String },
+    events: {type: [mongoose.Schema.Types.ObjectId], ref:'Events'}
 }, {collection: 'Users'});
 
 

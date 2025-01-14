@@ -2,6 +2,8 @@ import { HydratedDocument } from 'mongoose';
 import { ADMIN_EMAIL } from '../constants';
 import  { User, IUser } from '../models/users'
 import { UserRole } from '../types/types';
+import { UserDto } from 'types-api-volunteer/src';
+import { getUserEventsDocs } from './events.service';
 
 
 export const createUser = async(newUser: IUser) => {
@@ -15,7 +17,7 @@ export const createUser = async(newUser: IUser) => {
         }
 }
 
-export const getUser = async(userEmail: string, userPassword: string ): Promise<HydratedDocument<IUser> | null> => {
+export const getUserByEmail = async(userEmail: string ): Promise<HydratedDocument<IUser> | null> => {
     try{
         const filter = {
             email: userEmail,
@@ -27,6 +29,32 @@ export const getUser = async(userEmail: string, userPassword: string ): Promise<
         
         return user;
     } catch(err) {
+        throw new Error('Failed to find user');
+    }
+}
+
+export const getUserDoc = async(userId: string) => {
+    try{
+        const filter ={
+            _id: userId,
+        }
+
+        const user = await User.findOne(filter);
+        if(!user){
+            throw new Error("No such user");
+        }
+
+        const transformedUser: UserDto = {
+            _id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.phone,
+            role: user.role,
+        }
+
+        return transformedUser;
+    }catch(err){
         throw new Error('Failed to find user');
     }
 }
@@ -54,4 +82,29 @@ export const determineUserRole = (email: string) => {
         role = UserRole.Admin;
     }
     return role;
+}
+
+export const addEventToUserHistory = async(userId: string, eventId: string) => {
+    try{
+        const result = await User.updateOne(
+            {_id: userId},
+            {$addToSet: {events: eventId}}
+        );
+        return result;
+    }catch(err){
+
+    };
+}
+
+export const getUserEvents = async(userId: string) => {
+    try{
+        const filter = {
+            _id: userId,
+        }
+        const user = await User.findOne(filter);
+
+        return user?.events;
+    }catch(err){
+        throw new Error('Internal server error');
+    }
 }

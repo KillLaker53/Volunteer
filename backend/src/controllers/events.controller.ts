@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { IEvent } from '../models/events';
-import { addUserToEvent, createEventDoc, getEventDoc, getEventsDocs, removeUserFromEvent } from '../services/events.service';
+import { addUserToEvent, createEventDoc, getAllEventsDocs, getEventDoc, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
 import { geocodeLocation } from '../library/utils';
 import { Location } from '../types/types';
+import { addEventToUserHistory, getUserEvents } from '../services/user.service';
+import { UserEventDto } from 'types-api-volunteer/src';
 
 export const createEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
@@ -36,6 +38,7 @@ export const addVolunteerToEvent = async(req: Request, res: Response, next: Next
         const volunteerId = req.body.userId;
         const eventId = req.body.eventId; 
         const updatedEvent = await addUserToEvent(volunteerId, eventId);
+        addEventToUserHistory(volunteerId, eventId);
         res.status(201).json(updatedEvent);
         return;
     } catch(err){
@@ -60,13 +63,23 @@ export const removeVolunteerFromEvent = async(req: Request, res: Response, next:
 
 }
 
-export const getEvents = async(req: Request, res: Response, next: NextFunction) => {
+export const getEventsHomepage = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const events = await getEventsDocs();
+        const events = await getAllEventsDocs();
         res.status(200).json(events);
     }catch(err){
+       res.status(500).json({ message: "An internal server error occurred" });
+    }
+};
+
+export const getUserEventDetails = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.query.userId as string;
+        const eventIds = await getUserEvents(userId);
+        const events: UserEventDto[] = await getUserEventsDocs(eventIds);
+        res.status(200).json(events);
+    } catch(err){
         res.status(500).json({message: "An internal server error occurred"});
-        return;
     }
 }
 

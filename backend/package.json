@@ -19,7 +19,7 @@
     "mongoose": "^8.8.0",
     "opencage-api-client": "^1.0.7",
     "os-utils": "^0.0.14",
-    "types-api-volunteer": "^1.0.9"
+    "types-api-volunteer": "^1.0.14"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

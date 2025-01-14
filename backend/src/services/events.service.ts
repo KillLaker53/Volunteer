@@ -1,8 +1,8 @@
 import { User, IUser} from '../models/users';
 import { Event, IEvent} from '../models/events';
-import { Types } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import { Location } from '../types/types';
-import { SidebarEventDto, EventPageDto } from 'types-api-volunteer/src/index';
+import { SidebarEventDto, EventPageDto, UserEventDto } from 'types-api-volunteer/src/index';
 import { formatDateRange } from '../library/utils';
 
 export const createEventDoc = async(event: IEvent) => {
@@ -70,22 +70,45 @@ export const findNearestEvents = async(userLocation: Location, radius: Number) =
     }
 }
 
-export const getEventsDocs = async() => {
-    try{
-        const filter = {};
+export const getAllEventsDocs = async() => {
+    try {
+        const filter ={};
         const events = await Event.find(filter);
-        const transformedEvents = events.map(event => ({
-            id: event.id,
+
+        const transformedEvents: SidebarEventDto[]  = events.map(event => ({
+            _id: event.id,
             eventName: event.eventName,
             eventType: event.eventType,
             startDate: event.startDate.toISOString(),
             endDate: event.endDate.toISOString(),
             location: event.location.coordinates,
-            status: event.status
+            status: event.status,
+        }));
+
+        return transformedEvents;
+    } catch (err) {
+        console.error("Error in getEventsDocs:", err); 
+        throw new Error("Could not load events");
+    }
+};
+
+export const getUserEventsDocs = async(eventIds?: ObjectId[]) => {
+    if(!eventIds || eventIds.length === 0){
+        return [];
+    }
+
+    try{
+        const events = await Event.find({_id: {$in: eventIds}});
+        
+        const transformedEvents: UserEventDto[] = events.map(event => ({
+            eventName: event.eventName,
+            eventType: event.eventType,
+            date: formatDateRange(event.startDate, event.endDate),
+            status: event.status,    
         }));
         return transformedEvents;
     }catch(err){
-        throw new Error("Could not load events");
+        throw new Error("Failed to fetch events");
     }
 }
 
@@ -102,7 +125,7 @@ export const getEventDoc = async(eventId: string) => {
         const date: string = formatDateRange(event.startDate, event.endDate);
 
         const transformedEvent: EventPageDto = {
-            id: event.id,
+            _id: event._id.toString(),
             eventName: event.eventName,
             eventType: event.eventType,
             date: date,
@@ -118,4 +141,5 @@ export const getEventDoc = async(eventId: string) => {
         throw new Error("Could not load event")
     }
 }
+
 
