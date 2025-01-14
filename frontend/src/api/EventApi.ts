@@ -1,9 +1,9 @@
-import { SidebarEventDto, EventLocationDto, EventPageDto } from 'types-api-volunteer/src/index';
+import { SidebarEventDto, EventLocationDto, EventPageDto, UserEventDto } from 'types-api-volunteer/src/index';
 
 export const fetchEvents = async() => {
     try{
    
-        const response = await fetch('http://localhost:5000/api/getEvents');
+        const response = await fetch('http://localhost:5000/api/homepage/getEvents');
         if(!response.ok){
             throw new Error('Failed to fetch events');
         }
@@ -18,7 +18,7 @@ export const fetchEvents = async() => {
 export const fetchEventCoordinates = (events: SidebarEventDto[]): EventLocationDto[] => {
     return events.map((event) => {
         return {
-            id: event.id,
+            _id: event._id,
             type: event.eventType,
             longitude: event.location[0],
             latitude: event.location[1]
@@ -51,7 +51,6 @@ export const fetchEvent = async(eventId: string) => {
 }
 
 export const signUpForEvent = async(userId: string, eventId: string) => {
-    try{
         const response = await fetch('http://localhost:5000/api/signForEvent', 
             {
                 method:'POST',
@@ -67,7 +66,26 @@ export const signUpForEvent = async(userId: string, eventId: string) => {
             throw new Error(errorData);
         }
 
-    }catch(err){
-
-    }
 }
+
+export const fetchUserEvents = async (userId: string): Promise<UserEventDto[]> => {
+    try {
+        const response = await fetch(`http://localhost:5000/api/profile/getEvents?userId=${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text(); 
+            throw new Error(`Failed to fetch events: ${errorMessage}`);
+        }
+
+        const events: UserEventDto[] = await response.json();
+        return events;
+    } catch (error) {
+        console.error("Error fetching user events:", error);
+        return []; 
+    }
+};

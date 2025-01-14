@@ -42,3 +42,19 @@ export const registerUser = async(
     const response_data: AuthenticatedResponseDto<UserDto> = await response.json();
     return response_data;
 }
+
+export const fetchUser = async(userId: string) => {
+
+    const response = await fetch(`http://localhost:5000/api/getUser?userId=${encodeURIComponent(userId)}`, {
+            method:'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+    });
+    if(!response.ok){
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+    const response_data: UserDto = await response.json();
+    return response_data;
+}
