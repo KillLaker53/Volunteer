@@ -1,0 +1,56 @@
+.user-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f6f8;
+    height: fit-content;
+    gap: 20px;
+}
+
+.user-info-header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-top: 20px;
+}
+
+.user-info-card {
+    width: 50%;
+    border: 3px solid orange;
+    border-radius: 16px;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+}
+
+.user-info-item {
+    font-size: 18px;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px; 
+}
+
+.edit-button {
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: darkorange;
+    transform: scale(1.05); 
+}

@@ -1,0 +1,17 @@
+.user-event-box{
+    flex: 1;
+    border: 2px solid orange;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 200px;
+}
+
+.user-event-box-title{
+    margin-bottom:20px;
+}
+
