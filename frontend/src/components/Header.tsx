@@ -3,6 +3,7 @@ import './Header.css';
 import { useNavigate } from 'react-router-dom';
 import Button from './HomePage/Button';
 import { myProfileIcon } from '../library/constants';
+import { UserDto } from 'types-api-volunteer/src';
 
 interface HeaderProps{
   isLoggedIn: boolean;
@@ -18,18 +19,35 @@ const Header: React.FC<HeaderProps> = ({isLoggedIn, setIsLoggedIn}) => {
 
   const handleSignOutClick = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userData');
     setIsLoggedIn(false);
     navigate('/');
   }
 
   const handleProfileClick = () => {
     const token = localStorage.getItem('token');
-    if(!token){
+    if (!token) {
       navigate('/login');
-    }else{
-      navigate('/profile');
+    } else {
+      const userDataString = localStorage.getItem('userData');
+      if (userDataString) {
+        try {
+          const userData: UserDto = JSON.parse(userDataString); 
+          const userId: string = userData._id;
+          if (!userId) {
+            console.log("User ID is not found");
+            return; 
+          }
+          navigate(`/profile/${userId}`);
+        } catch (error) {
+          console.error("Error parsing user data", error);
+        }
+      } else {
+        console.log("User data is not found");
+      }
     }
-  }
+  };
 
   const handleMapClick = () => {
     navigate('/');
