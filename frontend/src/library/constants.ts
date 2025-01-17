@@ -22,3 +22,5 @@ export const eventTitleBackground = require("../images/event-title-background.pn
 export const eventDescriptionDate = require("../images/event-description-date.png")
 
 export const eventDescriptionLocation = require("../images/event-description-location.png");
+
+export const redPdf = require("../images/red-pdf.png");

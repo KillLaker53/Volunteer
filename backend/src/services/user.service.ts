@@ -108,3 +108,15 @@ export const getUserEvents = async(userId: string) => {
         throw new Error('Internal server error');
     }
 }
+
+export const getUserEmail = async(userId: string) => {
+    try{
+        const filter = {
+            _id: userId,
+        }
+        const user = await User.findOne(filter);
+        return user?.email;
+    }catch(err) {
+        throw new Error('Internal server error');
+    }
+}

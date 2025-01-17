@@ -6,6 +6,9 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .user-event-card:hover {
@@ -13,14 +16,19 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.user-event-card h3 {
+.user-event-card-information {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-event-card-information h3 {
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 10px;
   color: #333;
 }
 
-.user-event-card p {
+.user-event-card-information p {
   margin: 8px 0;
   font-size: 1rem;
   color: #555;
@@ -28,7 +36,7 @@
   align-items: center;
 }
 
-.user-event-card p strong {
+.user-event-card-information p strong {
   margin-right: 8px;
   color: #333;
 }
@@ -36,4 +44,51 @@
 .user-card-divider {
   border-top: 1px solid #e0e0e0;
   margin: 10px 0;
+}
+
+
+.button-send-email-pdf{
+  display:flex;
+  flex-direction: row;
+  border: 1px solid red;
+  font-weight: bolder;
+  align-self: flex-end;
+  position: relative;
+  font-size: 14px;
+  height: fit-content;
+  width: fit-content;
+  padding: 10px;
+  color: red;
+  background-color: whitesmoke;
+  cursor: pointer;
+  border-radius: 10px;
+  gap: 15px;
+}
+
+.button-send-email-pdf:hover{
+  color: white;
+  border-color: black;
+  background-color: lightgrey;
+}
+
+
+.button-send-email-pdf-img{
+  position: relative;
+  width: 30px; 
+  height: 30px;
+}
+
+.button-send-email-pdf-text {
+  position: relative;
+  align-self: center;
+}
+
+.status-finished {
+  color: green;
+  font-weight: bolder;
+}
+
+.status-default {
+  color: darkblue;
+  font-weight: bolder;
 }

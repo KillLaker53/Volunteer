@@ -5,13 +5,14 @@ import Donations from "./Donations";
 import './UserActivity.css';
 
 interface UserActivityProps {
+    setShowPopup: (arg0: boolean) => void;
     user: UserDto;
 }
 
-const UserActivity: React.FC<UserActivityProps> = ({user}) => {
+const UserActivity: React.FC<UserActivityProps> = ({setShowPopup, user}) => {
     return(
         <div className="activity-container">
-            <SignedUpEvents userId={user._id} />
+            <SignedUpEvents setShowPopup={setShowPopup} user={user} />
             <Donations userId={user._id} />
         </div>
     );

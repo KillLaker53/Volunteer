@@ -5,6 +5,8 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { SECRET_KEY } from '../constants'
 import { UserDto } from 'types-api-volunteer/src'
+import { getEventDoc } from '../services/events.service'
+import { generateCertificate, sendCertificateToEmail } from '../library/utils'
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -115,6 +117,25 @@ export const getUser = async(req: Request, res: Response, next: NextFunction) =>
         res.status(201).json(user);
         return;
     }catch(err){
+        res.status(500).json({message: "An internal server error has occurred"});
+        return;
+    }
+}
+
+export const sendCertificate = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.query.userId as string;
+        const eventId = req.query.eventId as string;
+        const user = await getUserDoc(userId);
+        const event = await getEventDoc(eventId);
+        console.log(user);
+        console.log(event);
+        const pdfCertificate = await generateCertificate(user.firstName, user.lastName, event.eventName, event.date);
+        
+        await sendCertificateToEmail(user.email, user.firstName, user.lastName, pdfCertificate);
+        res.status(201).json({message: "Successfully sent certificate"});
+    }catch(err){
+        console.error(err);
         res.status(500).json({message: "An internal server error has occurred"});
         return;
     }

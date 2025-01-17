@@ -5,6 +5,7 @@ import { UserDto } from 'types-api-volunteer/src';
 import UserInformation from './UserInformation';
 import { fetchUser } from '../../api/UserApi';
 import UserActivity from './UserActivity';
+import Popup from '../Popup';
 
 
 const ProfilePage = () => {
@@ -12,8 +13,7 @@ const ProfilePage = () => {
     const { userId } = useParams<{userId?: string}>();
     const [user, setUser] = useState<UserDto | null>();
     const [doesUserExist, setDoesUserExist] = useState<boolean>(false);
-
-
+    const [showPopup, setShowPopup] = useState<boolean>(false);
     
     useEffect(() => {
         const fetchAndSetUser = async() => {
@@ -50,9 +50,14 @@ const ProfilePage = () => {
             { user && 
                 <>
                     <UserInformation user={user} />
-                    <UserActivity user={user} />
+                    <UserActivity setShowPopup={setShowPopup} user={user} />
                 </>
             }
+            {showPopup && (
+                <Popup setShowPopup={setShowPopup} popupTitle='Email sent successfully!' popupText={`You can check your certificate on email: ${user?.email}`}/>
+            )
+            }
+
         </>
     );
 }

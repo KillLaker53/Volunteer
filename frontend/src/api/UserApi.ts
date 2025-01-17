@@ -58,3 +58,20 @@ export const fetchUser = async(userId: string) => {
     const response_data: UserDto = await response.json();
     return response_data;
 }
+
+export const fetchAndSendPdf = async(userId: string, eventId: string) => {
+    console.log(eventId);
+    const response = await fetch(`http://localhost:5000/api/sendPdfToEmail?userId=${userId}&eventId=${eventId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application-json',
+        }
+    });
+
+    if(!response.ok){
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+
+}
+

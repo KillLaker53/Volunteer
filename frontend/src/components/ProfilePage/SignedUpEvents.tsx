@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import './SignedUpEvents.css';
 import { fetchUserEvents } from "../../api/EventApi";
-import { UserEventDto } from "types-api-volunteer/src";
+import { UserDto, UserEventDto } from "types-api-volunteer/src";
 import UserEvent from "./UserEvent";
 
 interface UserEventsProps{
-    userId: string;
+    setShowPopup: (arg0: boolean) => void;
+    user: UserDto;
 }
 
-const SignedUpEvents: React.FC<UserEventsProps> = ({userId}) => {
+const SignedUpEvents: React.FC<UserEventsProps> = ({setShowPopup, user}) => {
     const [events, setEvents] = useState<UserEventDto[]>();
     
  
@@ -26,8 +27,8 @@ const SignedUpEvents: React.FC<UserEventsProps> = ({userId}) => {
               setEvents([]); 
             }
           };
-        fetchAndSetEvents(userId);
-        }, [userId]);
+        fetchAndSetEvents(user._id);
+        }, [user._id]);
     return(
         <div className="user-event-box">
             <h2 className="user-event-box-title"><strong>Events you have signed up for</strong></h2>
@@ -35,7 +36,7 @@ const SignedUpEvents: React.FC<UserEventsProps> = ({userId}) => {
                 {events && 
 
                     events.map((event, index) => (
-                        <UserEvent key={index} event={event} />
+                        <UserEvent setShowPopup={setShowPopup} key={index} user={user} event={event} />
                     ))
                 }
      
