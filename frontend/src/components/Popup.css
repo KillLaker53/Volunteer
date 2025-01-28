@@ -1,0 +1,97 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 80%;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.popup-content p {
+    margin: 20px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Close Button */
+.popup-close-button {
+    padding: 10px 20px;
+    background-color: #ff9000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.popup-close-button:hover {
+    background-color: #ff7a00;
+}
+
+.donation-section {
+    margin: 20px 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.donation-section input {
+    position: relative;
+    width: 70%;
+    align-self: center;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+.donation-section input:focus {
+    outline: none;
+    border-color: #ff9000;
+}
+
+.popup-send-button {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px 20px;
+    background-color: #ff9000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.popup-send-button:hover {
+    background-color: #ff7a00;
+}
+
