@@ -8,7 +8,6 @@ import mongoose from './config/mongoose';
 import routes from './routes'
 import { PORT } from "./config/config";
 
-
 const app = express();
 app.use(cors({
     origin: "http://localhost:3000",

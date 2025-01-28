@@ -101,6 +101,7 @@ export const getUserEventsDocs = async(eventIds?: ObjectId[]) => {
         const events = await Event.find({_id: {$in: eventIds}});
         
         const transformedEvents: UserEventDto[] = events.map(event => ({
+            _id: event.id,
             eventName: event.eventName,
             eventType: event.eventType,
             date: formatDateRange(event.startDate, event.endDate),
@@ -142,4 +143,21 @@ export const getEventDoc = async(eventId: string) => {
     }
 }
 
+export const getEventName = async(eventId: string) => {
+    try {
+        const event = await Event.findById(eventId);
+        return event?.eventName;
+    } catch (error) {
+        throw new Error("Error while getting the event name from the database");
+    }
+}
 
+export const getDonationEventDocs = async(eventIds: string[]) => {
+    try{
+        const events = await Event.find({_id: {$in: eventIds}}).lean();
+        return events;
+    }catch(err){
+        
+    }
+
+}

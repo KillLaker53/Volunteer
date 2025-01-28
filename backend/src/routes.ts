@@ -1,9 +1,10 @@
 import express from 'express';
-import { getUser, getUsers, loginUser, registerUser } from './controllers/users.controller';
+import { getUser, getUsers, loginUser, registerUser, sendCertificate } from './controllers/users.controller';
 import { validateUserFields, checkIfUserExists, validateJwtToken } from './middleware/validate.user';
 import { validateEventFields, checkIfEventExists } from './middleware/validate.event';
 import { handleValidationResult } from './middleware/handle.validation.result';
 import { addVolunteerToEvent, createEvent, getEvent, getEventsHomepage, getUserEventDetails } from './controllers/events.controller';
+import { getUserDonationDetails, makeDonation } from './controllers/donations.controller';
 
 const routes = express.Router();
 
@@ -23,6 +24,11 @@ routes.get('/api/homepage/getEvents', getEventsHomepage);
 
 routes.get('/api/profile/getEvents', getUserEventDetails);
 
-routes.post('/api/signForEvent', addVolunteerToEvent);
+routes.post('/api/signForEvent',/*validate jwt token*/ addVolunteerToEvent);
 
+routes.get('/api/sendPdfToEmail',/*validate jwt token*/ sendCertificate);
+
+routes.post('/api/donate', makeDonation);
+
+routes.get('/api/donations', getUserDonationDetails);
 export default routes;
