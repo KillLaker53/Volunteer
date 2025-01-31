@@ -13,7 +13,7 @@ const UserActivity: React.FC<UserActivityProps> = ({setShowPopup, user}) => {
     return(
         <div className="activity-container">
             <SignedUpEvents setShowPopup={setShowPopup} user={user} />
-            <Donations userId={user._id} />
+            <Donations user={user} />
         </div>
     );
 }

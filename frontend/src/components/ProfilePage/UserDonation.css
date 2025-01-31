@@ -1,0 +1,35 @@
+.user-donation-card {
+    position: relative;
+    background: linear-gradient(145deg, #ffffff, #f8f9fc);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #b0b0b0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-donation-card h3 {
+    color: black;
+    margin: 0; 
+}
+
+.user-donation-card p {
+    color: grey;
+    margin: 5px 0; 
+}
+
+.user-donation-card-amount {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+
+.user-donation-card-amount svg {
+    flex-shrink: 0; 
+    width: 20px; 
+    height: 20px; 
+}
+
+.user-donation-card:hover{
+    transform: translateY(-5px);
+}

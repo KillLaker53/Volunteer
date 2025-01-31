@@ -1,5 +1,6 @@
 .user-donations-box {
     display: flex;
+    flex-direction: column;
     flex: 1; 
     border: 2px solid orange;
     border-radius: 10px;
@@ -7,4 +8,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     margin-bottom: 200px;
+    gap: 15px;
   }
+
+
