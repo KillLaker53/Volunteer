@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import './SearchBar.css'
-const SearchBar = () => {
+import { SidebarEventDto } from "types-api-volunteer/src";
+import { filterSidebarEventsByName } from "../../../library/utils";
+
+
+interface SearchBarProps {
+    events: SidebarEventDto[];
+    setEvents: (events: SidebarEventDto[]) => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({events, setEvents}) => {
     const [query, setQuery] = useState("");
 
     const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -8,8 +17,8 @@ const SearchBar = () => {
     };
 
     const handleSearch = () => {
-        console.log("Search query:", query);
-        // add search
+        const filteredEvents = filterSidebarEventsByName(query, events);
+        setEvents(filteredEvents);
     };
 
     return (
