@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import { body } from 'express-validator' 
 import { IUser, User } from '../models/users';
-import { SECRET_KEY } from '../constants';
+import { SECRET_KEY } from '../library/constants';
 import jwt from 'jsonwebtoken';
 export const validateUserFields = [
     body('username').notEmpty().isString(),

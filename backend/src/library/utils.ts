@@ -1,5 +1,5 @@
 import { Location } from "./types";
-import { NODEMAILER_EMAIL, NODEMAILER_PASSWORD, OPENCAGE_API_KEY } from "../constants";
+import { NODEMAILER_EMAIL, NODEMAILER_PASSWORD, OPENCAGE_API_KEY } from "./constants";
 import OpenCage  from 'opencage-api-client';
 import PDFDocument from 'pdfkit';
 import nodemailer from 'nodemailer';

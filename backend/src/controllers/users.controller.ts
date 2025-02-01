@@ -3,7 +3,7 @@ import { createUser, determineUserRole, getUserByEmail, getUserDoc, getUsersDocs
 import { IUser } from '../models/users'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { SECRET_KEY } from '../constants'
+import { SECRET_KEY } from '../library/constants'
 import { UserDto } from 'types-api-volunteer/src'
 import { getEventDoc } from '../services/events.service'
 import { generateCertificate, sendCertificateToEmail } from '../library/utils'

@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import Stripe from 'stripe';
-import { STRIPE_SECRET } from '../constants';
+import { STRIPE_SECRET } from '../library/constants';
 import { IDonation } from '../models/donations';
 import { createDonationDoc, getUserDonations } from '../services/donation.service';
 import { UserDonationDto } from 'types-api-volunteer/src';
