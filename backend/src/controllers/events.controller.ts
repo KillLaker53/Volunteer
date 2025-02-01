@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { IEvent } from '../models/events';
 import { addUserToEvent, createEventDoc, getAllEventsDocs, getEventDoc, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
 import { geocodeLocation } from '../library/utils';
-import { Location } from '../types/types';
+import { Location, Status} from '../types/types';
 import { addEventToUserHistory, getUserEvents } from '../services/user.service';
 import { UserEventDto } from 'types-api-volunteer/src';
 
@@ -22,7 +22,7 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
             volunteers: [],
             address: address,
             location: location,
-            status: req.body.status
+            status: Status.On_Going
         }   
         
         const createdEvent: IEvent = await createEventDoc(eventData);

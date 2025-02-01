@@ -22,13 +22,13 @@ routes.get('/api/getEvent', getEvent);
 
 routes.get('/api/homepage/getEvents', getEventsHomepage);
 
-routes.get('/api/profile/getEvents', getUserEventDetails);
+routes.get('/api/profile/getEvents', validateJwtToken, getUserEventDetails);
 
-routes.post('/api/signForEvent',/*validate jwt token*/ addVolunteerToEvent);
+routes.post('/api/signForEvent', validateJwtToken, /*validate if event has ended */ addVolunteerToEvent);
 
-routes.get('/api/sendPdfToEmail',/*validate jwt token*/ sendCertificate);
+routes.get('/api/sendPdfToEmail', validateJwtToken, /*validate if user participated in event*/sendCertificate);
 
-routes.post('/api/donate', makeDonation);
+routes.post('/api/donate', validateJwtToken, makeDonation);
 
 routes.get('/api/donations', getUserDonationDetails);
 export default routes;

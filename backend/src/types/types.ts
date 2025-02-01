@@ -4,7 +4,7 @@ export enum EventType {
     Earthquake = 'Earthquake',
 };
 export enum Status{
-    Fire = 'On-Going', 
+    On_Going = 'On-Going', 
     Finished = 'Finished',
 };
 
