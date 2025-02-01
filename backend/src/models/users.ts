@@ -1,5 +1,5 @@
 import mongoose, { model, Schema, Model } from "mongoose";
-import { UserRole } from "../types/types";
+import { UserRole } from "../library/types";
 
 export interface IUser{
     username: string;

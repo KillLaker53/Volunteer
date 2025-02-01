@@ -1,7 +1,7 @@
 import { User, IUser} from '../models/users';
 import { Event, IEvent} from '../models/events';
 import { ObjectId, Types } from 'mongoose';
-import { Location } from '../types/types';
+import { Location } from '../library/types';
 import { SidebarEventDto, EventPageDto, UserEventDto } from 'types-api-volunteer/src/index';
 import { formatDateRange } from '../library/utils';
 

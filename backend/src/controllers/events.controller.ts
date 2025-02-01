@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { IEvent } from '../models/events';
 import { addUserToEvent, createEventDoc, getAllEventsDocs, getEventDoc, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
 import { geocodeLocation } from '../library/utils';
-import { Location, Status} from '../types/types';
+import { Location, Status} from '../library/types';
 import { addEventToUserHistory, getUserEvents } from '../services/user.service';
 import { UserEventDto } from 'types-api-volunteer/src';
 

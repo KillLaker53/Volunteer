@@ -1,7 +1,7 @@
 import { HydratedDocument } from 'mongoose';
 import { ADMIN_EMAIL } from '../constants';
 import  { User, IUser } from '../models/users'
-import { UserRole } from '../types/types';
+import { UserRole } from '../library/types';
 import { UserDto } from 'types-api-volunteer/src';
 import { getUserEventsDocs } from './events.service';
 

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { body } from 'express-validator';
 import { Types } from 'mongoose';
 import { Event, IEvent} from '../models/events';
-import { EventType, Status } from '../types/types';
+import { EventType, Status } from '../library/types';
 
 export const validateEventFields = [
     body('eventName').isString().notEmpty().isLength({min: 3}),

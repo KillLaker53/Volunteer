@@ -1,6 +1,6 @@
-import { EventType, Status } from '../types/types';
+import { EventType, Status } from '../library/types';
 import mongoose, {model, Model, Schema } from 'mongoose';
-import { Location } from '../types/types';
+import { Location } from '../library/types';
 
 export interface IEvent {
     eventName: string;
