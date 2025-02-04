@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { createUser, determineUserRole, getUserByEmail, getUserDoc, getUsersDocs} from '../services/user.service'
+import { createUser, determineUserRole, getUserByEmail, getUserDoc, getUsersDocs, updateEmailProfileDoc, updatePhoneProfileDoc} from '../services/user.service'
 import { IUser } from '../models/users'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -27,7 +27,7 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         };
 
         const createdUser = await createUser(userData);
-
+        // TODO EXTRACT JWT TO FUNCTION AND SEND ONLY JWT TO FRONTEND
         const token = jwt.sign(
             {
                 id: createdUser._id.toString(),
@@ -128,8 +128,6 @@ export const sendCertificate = async(req: Request, res: Response, next: NextFunc
         const eventId = req.query.eventId as string;
         const user = await getUserDoc(userId);
         const event = await getEventDoc(eventId);
-        console.log(user);
-        console.log(event);
         const pdfCertificate = await generateCertificate(user.firstName, user.lastName, event.eventName, event.date);
         
         await sendCertificateToEmail(user.email, user.firstName, user.lastName, pdfCertificate);
@@ -137,6 +135,32 @@ export const sendCertificate = async(req: Request, res: Response, next: NextFunc
     }catch(err){
         console.error(err);
         res.status(500).json({message: "An internal server error has occurred"});
+        return;
+    }
+}
+
+export const updateProfileEmail = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.body.userId;
+        const newEmail = req.body.email;
+        await updateEmailProfileDoc(userId, newEmail);
+        res.status(201).json({message: "Successfully updated email"});
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: "An internal server error has occurred"});
+        return;
+    }
+}
+
+export const updateProfilePhone = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.body.userId;
+        const newPhone = req.body.phone;
+        await updatePhoneProfileDoc(userId, newPhone);
+        res.status(200).json({message: "Successfully updated phone"});
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: "An internal error has occurred"});
         return;
     }
 }

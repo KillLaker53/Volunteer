@@ -4,6 +4,8 @@ import  { User, IUser } from '../models/users'
 import { UserRole } from '../library/types';
 import { UserDto } from 'types-api-volunteer/src';
 import { getUserEventsDocs } from './events.service';
+import { sendEventNotification } from '../library/utils';
+import { IEvent } from '../models/events';
 
 
 export const createUser = async(newUser: IUser) => {
@@ -17,7 +19,7 @@ export const createUser = async(newUser: IUser) => {
         }
 }
 
-export const getUserByEmail = async(userEmail: string ): Promise<HydratedDocument<IUser> | null> => {
+export const getUserByEmail = async(userEmail: string ) => {
     try{
         const filter = {
             email: userEmail,
@@ -118,5 +120,43 @@ export const getUserEmail = async(userId: string) => {
         return user?.email;
     }catch(err) {
         throw new Error('Internal server error');
+    }
+}
+
+export const notifyUsers = async(event: IEvent) => {
+    try{
+        const users = await getUsersDocs();
+        users.map(user => sendEventNotification(event, user.email))
+    }catch (err){
+        throw new Error('Sending notifications about new event failed');
+    }
+}
+
+export const updateEmailProfileDoc = async(userId: string, newEmail: string) => {
+    try{
+        const result = await User.updateOne(
+            {_id: userId},
+            {$set: {email: newEmail}}
+        );
+        if(result.modifiedCount !== 1) {
+            throw new Error("Error while trying to update the email of user");
+        }
+
+    }catch(err){ 
+        throw new Error(`Error updating the email of user: ${userId} failed - ${err}`);
+    }
+}
+
+export const updatePhoneProfileDoc = async(userId: string, newPhone: string) => {
+    try{
+        const result = await User.updateOne(
+            {_id: userId},
+            {$set: {phone: newPhone}}
+        );
+        if(result.modifiedCount !== 1) {
+            throw new Error("Error while trying to update phone of user");
+        }
+    }catch(err){
+        throw new Error(`Error updating the phone of user ${userId} - ${err}`);
     }
 }
