@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './EventPage.css';
-import Header from '../Header';
+import Header from '../Shared/Header';
 import { useParams } from 'react-router-dom';
 import EventPageTitle from './EventPageTitle';
 import EventDetails from './EventDetails';

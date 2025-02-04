@@ -3,7 +3,7 @@ import { EventPageDto, UserDto } from "types-api-volunteer/src";
 import "./EventContribution.css";
 import { useNavigate } from "react-router-dom";
 import { signUpForEvent } from "../../api/EventApi";
-import Popup from "../Popup";
+import Popup from "../Shared/Popup";
 import { fetchStripeUrl } from "../../api/DonationApi";
 
 interface EventContributionProps {

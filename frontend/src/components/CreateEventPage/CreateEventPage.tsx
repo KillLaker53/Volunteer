@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import './CreateEventPage.css';
-import Header from "../Header";
+import Header from "../Shared/Header";
 import InputBox from "./InputBox";
-import Popup from "../Popup";
+import Popup from "../Shared/Popup";
 import { createEvent } from "../../api/EventApi";
 
 const CreateEventPage = () => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
-import Button from './HomePage/Button';
-import { myProfileIcon } from '../library/constants';
+import Button from '../HomePage/Button';
+import { myProfileIcon } from '../../library/constants';
 import { UserDto } from 'types-api-volunteer/src';
 
 interface HeaderProps{

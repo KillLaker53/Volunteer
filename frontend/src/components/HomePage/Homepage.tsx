@@ -3,7 +3,7 @@ import './HomePage.css';
 import "leaflet/dist/leaflet.css";
 import { EventLocationDto, SidebarEventDto } from 'types-api-volunteer/src';
 import { fetchEventCoordinates, fetchEvents } from '../../api/EventApi';
-import Header from '../Header';
+import Header from '../Shared/Header';
 import MapComponent from './MapComponent';
 import SidebarToggle from './Sidebar/SidebarToggle';
 

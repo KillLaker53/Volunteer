@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../Header';
+import Header from '../Shared/Header';
 import { useParams } from 'react-router-dom';
 import { UserDto } from 'types-api-volunteer/src';
 import UserInformation from './UserInformation';
 import { fetchUser } from '../../api/UserApi';
 import UserActivity from './UserActivity';
-import Popup from '../Popup';
+import Popup from '../Shared/Popup';
 
 
 const ProfilePage = () => {
