@@ -9,7 +9,7 @@ export const createEventDoc = async(event: IEvent) => {
     try{
 
         const createdEvent: IEvent = await Event.create(event);
-        //notify nearby users
+        
         return createdEvent;
 
     }catch(err){
@@ -17,7 +17,7 @@ export const createEventDoc = async(event: IEvent) => {
     }
 }
 
-export const addUserToEvent = async(volunteerId: string, eventId: string) => {
+export const addUserToEventHistory = async(volunteerId: string, eventId: string) => {
     try{
         const result = await Event.updateOne(
             {_id: eventId},
@@ -43,7 +43,7 @@ export const removeUserFromEvent = async(volunteerId: Types.ObjectId, eventId: T
             eventId, 
             { $pull: {volunteers: volunteerId}},
             { new: true }
-        )
+        );
     }catch(err){
         throw new Error("Failed to remove volunteer to the event")
     }
@@ -157,7 +157,6 @@ export const getDonationEventDocs = async(eventIds: string[]) => {
         const events = await Event.find({_id: {$in: eventIds}}).lean();
         return events;
     }catch(err){
-        
+        throw new Error("Error while fetching data for donations from the database")
     }
-
 }

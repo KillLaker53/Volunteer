@@ -45,7 +45,7 @@ const HomePage = () => {
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
         <div className='content'>
           <MapComponent events={mapEvents} selectedEvent={selectedEvent}/>
-          <SidebarToggle events={events} onEventClick={handleEventClick}/>
+          <SidebarToggle events={events} onEventClick={handleEventClick} setEvents={setEvents}/>
         </div>
       </div>
     );
