@@ -50,11 +50,13 @@ export const fetchEvent = async(eventId: string) => {
 
 }
 
-export const signUpForEvent = async(userId: string, eventId: string) => {
+export const signUpForEvent = async(token: string, userId: string, eventId: string) => {
+        
         const response = await fetch('http://localhost:5000/api/signForEvent', 
             {
                 method:'POST',
                 headers: {
+                    'Authorization' : `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({userId, eventId}),
@@ -63,16 +65,17 @@ export const signUpForEvent = async(userId: string, eventId: string) => {
 
         if(!response.ok){
             const errorData = await response.json();
-            throw new Error(errorData);
+            throw new Error(errorData.message);
         }
 
 }
 
-export const fetchUserEvents = async (userId: string): Promise<UserEventDto[]> => {
+export const fetchUserEvents = async (token: string, userId: string): Promise<UserEventDto[]> => {
     try {
         const response = await fetch(`http://localhost:5000/api/profile/getEvents?userId=${userId}`, {
             method: 'GET',
             headers: {
+                'Authorization' : `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -89,3 +92,40 @@ export const fetchUserEvents = async (userId: string): Promise<UserEventDto[]> =
         return []; 
     }
 };
+
+export const createEvent = async(
+    token: string,
+    eventName: string,
+    description: string,
+    address: string,
+    eventType: string,
+    startDateNotFormated: string,
+    endDateNotFormated: string,
+    requirementsString: string,
+    funding: string,
+    ) => {
+    try{
+        const startDate = new Date(startDateNotFormated.replace(', ', 'T')).toISOString();
+        
+        const endDate = new Date(endDateNotFormated.replace(', ', 'T')).toISOString();
+        const requirements = requirementsString.split(',').map(requirement => requirement.trim());
+        const fundingNeeded = Number(funding);
+        const response = await fetch('http://localhost:5000/api/createEvent', {
+            method: 'POST',
+            headers: {
+                'Authorization' : `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({eventName, description, eventType, startDate, endDate, requirements, address, fundingNeeded})
+        });
+
+        console.log(await response.json());
+        if(!response.ok) {
+            const errorMessage = await response.json();
+            throw new Error(errorMessage);
+        }
+
+    }catch(error) {
+        console.error(error);
+    }
+}

@@ -4,9 +4,10 @@ export const fetchStripeUrl = async(token: string, amount: number, userId: strin
     const response = await fetch('http://localhost:5000/api/donate', {
         method: 'POST',
         headers: {
+            'Authorization' : `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({token, amount, userId, eventId}),
+        body: JSON.stringify({amount, userId, eventId}),
     });
     if(!response.ok){
         throw new Error("Error fetching data");

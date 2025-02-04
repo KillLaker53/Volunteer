@@ -11,14 +11,15 @@ interface UserEventsProps{
 
 const SignedUpEvents: React.FC<UserEventsProps> = ({setShowPopup, user}) => {
     const [events, setEvents] = useState<UserEventDto[]>();
-    
- 
-
 
     useEffect(() => {
         const fetchAndSetEvents = async (userId: string) => {
             try {
-              const fetchedEvents: UserEventDto[] = await fetchUserEvents(userId);
+              const token = localStorage.getItem('token');
+              if(!token){
+                throw new Error("token not found");
+              }
+              const fetchedEvents: UserEventDto[] = await fetchUserEvents(token, userId);
     
               setEvents(fetchedEvents);
     

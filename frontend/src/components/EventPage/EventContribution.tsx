@@ -32,7 +32,11 @@ const EventContribution: React.FC<EventContributionProps> = ({ event, isLoggedIn
     const eventId = event._id;
 
     try {
-      await signUpForEvent(userId, eventId);
+      const token = localStorage.getItem('token');
+      if(!token){
+        throw new Error("token not found");
+      }
+      await signUpForEvent(token, userId, eventId);
       setPopupMode("signup");
       setShowPopup(true);
     } catch (err) {
