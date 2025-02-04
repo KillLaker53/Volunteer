@@ -5,6 +5,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import EventPage from './components/EventPage/EventPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProfilePage from './components/ProfilePage/ProfilePage';
+import CreateEventPage from './components/CreateEventPage/CreateEventPage';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path='/register' element={<RegisterPage />}/>
         <Route path='/event/:eventId' element={<EventPage />} />
         <Route path='/profile/:userId' element={<ProfilePage />}/>
+        <Route path='/createEvent' element={<CreateEventPage />}/>
       </Routes>
     </Router>
   );

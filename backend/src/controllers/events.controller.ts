@@ -1,19 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
 import { IEvent } from '../models/events';
-import { addUserToEvent, createEventDoc, getAllEventsDocs, getEventDoc, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
+import { addUserToEventHistory, createEventDoc, getAllEventsDocs, getEventDoc, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
 import { geocodeLocation } from '../library/utils';
 import { Location, Status} from '../library/types';
-import { addEventToUserHistory, getUserEvents } from '../services/user.service';
+import { addEventToUserHistory, getUserEvents, notifyUsers } from '../services/user.service';
 import { UserEventDto } from 'types-api-volunteer/src';
 
 export const createEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const address = req.body.address;
         const location: Location = await geocodeLocation(address);
-
+        
         const eventData: IEvent = {
             eventName: req.body.eventName,
-            description: req.body.eventDescription,
+            description: req.body.description,
             eventType: req.body.eventType,
             startDate: req.body.startDate,
             endDate: req.body.endDate,
@@ -26,6 +26,7 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
         }   
         
         const createdEvent: IEvent = await createEventDoc(eventData);
+        notifyUsers(createdEvent);
         res.status(201).json(createdEvent);
         return;
     }catch (err){
@@ -37,7 +38,7 @@ export const addVolunteerToEvent = async(req: Request, res: Response, next: Next
     try{
         const volunteerId = req.body.userId;
         const eventId = req.body.eventId; 
-        const updatedEvent = await addUserToEvent(volunteerId, eventId);
+        const updatedEvent = await addUserToEventHistory(volunteerId, eventId);
         addEventToUserHistory(volunteerId, eventId);
         res.status(201).json(updatedEvent);
         return;
@@ -59,8 +60,6 @@ export const removeVolunteerFromEvent = async(req: Request, res: Response, next:
         res.status(500).json({message: "An internal server error occurred"});
         return;
     }
-
-
 }
 
 export const getEventsHomepage = async(req: Request, res: Response, next: NextFunction) => {

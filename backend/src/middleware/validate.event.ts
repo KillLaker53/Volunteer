@@ -5,80 +5,99 @@ import { Event, IEvent} from '../models/events';
 import { EventType, Status } from '../library/types';
 
 export const validateEventFields = [
-    body('eventName').isString().notEmpty().isLength({min: 3}),
+    body('eventName').notEmpty().isString().isLength({min: 3}),
     
-    body('description').isString().notEmpty().isLength({min: 15}),
+    body('description').notEmpty().isString().isLength({min: 15}),
     
     body('eventType').custom((value) => {
-        if(!Object.values(EventType).includes(value)){
-            throw new Error(`Event must be of type ${Object.values(EventType).join(', ')}`);
-        }
-        return true
+        return validateEventType(value);
     }),
     
-    body('startDate').isISO8601(),
+    body('startDate').notEmpty().isISO8601(),
     
-    body('endDate').isISO8601().custom((endDate, { req }) => {
-        const startDate = new Date(req.body.startDate);
-        if(new Date(endDate) < startDate){
-            throw new Error('End date must be after the starting date');
-        }
-        return true;
+    body('endDate').notEmpty().isISO8601().custom((endDate, { req }) => {
+        return validateEndDate(new Date(req.body.startDate), new Date(endDate));
     }),
     
     body('requirements').isArray(),
     
-    body('fundingNeeded').isNumeric(),
+    body('fundingNeeded').notEmpty().isNumeric(),
     
-    body('address').isString(),
-
-    body('status').custom((value) => {
-        if(!Object.values(Status).includes(value)){
-            throw new Error(`Event must have a status of ${Object.values(Status).join(', ')}`)
-        }
-        return true;
-    }),
-
+    body('address').notEmpty().isString(),
 ];
 
 export const checkIfEventExists = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const eventName: Types.ObjectId = req.body.eventName;
-
+        const eventName = req.body.eventName;
         const event: IEvent | null= await Event.findOne({eventName: eventName});
-
+        console.log(event);
         if(event != null){
             res.status(400).json({message: "This event already exists"});
             return;
-        } 
+        }
+
+        next();
+    }catch(err){
+        res.status(500).json({message: "Internal server error"});
+    }
+    
+}
+
+export const validateEventIsActive = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const event = await Event.findOne({_id: req.body.eventId});
+        if(!event){
+            res.status(400).json({message: "Event doesn't exist"});
+            return;
+        }
+
+        const currentDate = new Date();
+        if(event.endDate && currentDate > new Date(event.endDate)){
+            event.status = Status.Finished;
+            await event.save();
+        }
+
+        if(event.status != Status.On_Going) {
+            res.status(401).json({message: "Event has finished"});
+            return;
+        }
+
+        next();
+    }catch(err){
+        res.status(500).json({message: "Internal server error"});
+    }
+}
+
+export const validateEventIsFinished = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const event = await Event.findOne({_id: req.query.eventId as string});
+        if(!event){
+            res.status(400).json({message: "Event doesn't exist"});
+            return;
+        }
+
+        if(event.status === Status.Finished){
+            next();
+        } else {
+            res.status(400).json({message: "Event hasn't finished yet"});
+        }
 
     }catch(err){
-        res.status(500).json({message: "ASD"});
+        res.status(500).json({message: "Internal server erro"});
     }
-    next();
 }
 
 
-export const isValidLocation = async(location: any) => {
-    if(!location || location.type !== 'Point'){
-        return false;
-    }   
-    if(!Array.isArray(location.coordinates)){
-        return false;
+const validateEventType = (eventType: any) => {
+    if(!Object.values(EventType).includes(eventType)){
+        throw new Error(`Event must be of type ${Object.values(EventType).join(', ')}`);
     }
-    if(location.coordinates.length !== 2){
-        return false;
-    }
+    return true
+}
 
-    const[longitude, latitude] = location.coordinates;
-    if(longitude > 180 ||
-        longitude < -180 ||
-        latitude > 90 ||
-        latitude < -90
-    ){
-        return false;
+const validateEndDate = (startDate: Date, endDate: Date) => {
+    if(endDate < startDate) {
+        throw new Error('End date must be after the starting date');
     }
-
     return true;
-
 }
