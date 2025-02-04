@@ -12,6 +12,10 @@ export const validateUserFields = [
     body('phone').isMobilePhone('bg-BG').isString(),
 ];
 
+export const validateLoginFields = [
+    body('email').notEmpty().isString(),
+    body('password').notEmpty().isString(),
+];
 
 export const checkIfUserExists = async(req:Request, res: Response, next: NextFunction) => {
     const email: String = req.body.email;
@@ -36,7 +40,7 @@ export const validateJwtToken = async(req: Request, res: Response, next: NextFun
             if(!SECRET_KEY){
                 throw new Error("JWT secret is not defined")
             }
-            jwt.verify(token, SECRET_KEY);  
+            jwt.verify(token, SECRET_KEY); 
             next();
         }
         
