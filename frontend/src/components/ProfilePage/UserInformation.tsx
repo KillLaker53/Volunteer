@@ -29,7 +29,6 @@ const UserInformation: React.FC<UserInformationProps> = ({ user }) => {
                 </div>
                 <div className="user-info-item">
                     <strong>Role:</strong> {user.role}
-                    <button className="edit-button">Edit</button>
                 </div>
             </div>
         </div>

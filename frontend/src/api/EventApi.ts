@@ -3,7 +3,7 @@ import { SidebarEventDto, EventLocationDto, EventPageDto, UserEventDto } from 't
 export const fetchEvents = async() => {
     try{
    
-        const response = await fetch('http://localhost:5000/api/homepage/getEvents');
+        const response = await fetch('http://localhost:5000/api/homepage/events');
         if(!response.ok){
             throw new Error('Failed to fetch events');
         }
@@ -29,7 +29,7 @@ export const fetchEventCoordinates = (events: SidebarEventDto[]): EventLocationD
 export const fetchEvent = async(eventId: string) => {
     try{
      
-        const response = await fetch(`http://localhost:5000/api/getEvent?eventId=${encodeURIComponent(eventId)}`, {
+        const response = await fetch(`http://localhost:5000/api/event?eventId=${encodeURIComponent(eventId)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export const signUpForEvent = async(token: string, userId: string, eventId: stri
 
 export const fetchUserEvents = async (token: string, userId: string): Promise<UserEventDto[]> => {
     try {
-        const response = await fetch(`http://localhost:5000/api/profile/getEvents?userId=${userId}`, {
+        const response = await fetch(`http://localhost:5000/api/profile/events?userId=${userId}`, {
             method: 'GET',
             headers: {
                 'Authorization' : `Bearer ${token}`,

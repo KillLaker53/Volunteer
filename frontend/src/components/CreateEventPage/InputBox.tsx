@@ -48,10 +48,8 @@ const InputBox: React.FC<InputBoxProps> = ({type, title, setValue, placeHolder})
                 className='create-event-input-box'/>
         
             )   
-            } 
-            
-        </>
-        
+            }  
+        </>   
     );
 }
 

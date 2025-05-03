@@ -51,12 +51,9 @@ const EventPage = () => {
                     <EventPageTitle event={event}  />
                     <EventDetails event={event} isLoggedIn={isLoggedIn}/>
                 </>
-
             }
-            
         </>
     );
-    
 }
 
 export default EventPage;

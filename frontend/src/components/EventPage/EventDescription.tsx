@@ -31,16 +31,12 @@ const EventDescription: React.FC<EventDescriptionProps> = ({event}) => {
                 <div>
                     <p className="event-description-label">Location:</p>
                     <p className="event-description-info">{event.address}</p>
-
                 </div>
             </div>
         </div>
         <div className="event-description-text">{event.description}</div>
-    </>
-            
-            
+    </>            
     );
-
 }
 
 export default EventDescription;
