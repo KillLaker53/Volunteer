@@ -1,8 +1,13 @@
 import { Location } from "./types";
-import { NODEMAILER_EMAIL, NODEMAILER_PASSWORD, OPENCAGE_API_KEY } from "./constants";
+import { NODEMAILER_EMAIL, NODEMAILER_PASSWORD, OPENCAGE_API_KEY, SECRET_KEY } from "./constants";
 import OpenCage  from 'opencage-api-client';
 import PDFDocument from 'pdfkit';
 import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken'
+import { IEvent } from "../models/events";
+import { UserDto } from "types-api-volunteer/src";
+import mongoose, { ObjectId } from "mongoose";
+
 
 export const geocodeLocation = async(address: string):Promise<Location> => {
     try{
@@ -102,4 +107,20 @@ export const sendCertificateToEmail = async(
         ],
     };
     await transporter.sendMail(mailOptions);
+}
+
+export const signJwt = async(userId: mongoose.Types.ObjectId, userEmail: string, userRole: string) => {
+    return jwt.sign(
+        {
+            id: userId,
+            email: userEmail,
+            role: userRole,
+        },
+        SECRET_KEY, 
+        { expiresIn: "1h" }
+    );
+}
+
+export const sendEventNotification = async(event: IEvent, userEmail: string) => {
+    
 }
