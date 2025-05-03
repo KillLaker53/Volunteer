@@ -47,7 +47,7 @@ export const makeDonation = async(req: Request, res: Response, next: NextFunctio
     }
 }
 
-export const getUserDonationDetails = async(req: Request, res: Response, next: NextFunction) => {
+export const userDonationDetails = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userId = req.query.userId as string;
         const userDonations = await getUserDonations(userId);

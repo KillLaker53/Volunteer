@@ -3,8 +3,8 @@ import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProf
 import { validateUserFields, validateLoginFields, checkIfUserExists, validateJwtToken } from './middleware/validate.user';
 import { validateEventFields, checkIfEventExists, validateEventIsActive, validateEventIsFinished } from './middleware/validate.event';
 import { handleValidationResult } from './middleware/handle.validation.result';
-import { addVolunteerToEvent, createEvent, getEvent, getEventsHomepage, getUserEventDetails, removeVolunteerFromEvent } from './controllers/events.controller';
-import { getUserDonationDetails, makeDonation } from './controllers/donations.controller';
+import { addVolunteerToEvent, createEvent, event, eventsHomepage,  userEventDetails, removeVolunteerFromEvent } from './controllers/events.controller';
+import { userDonationDetails, makeDonation } from './controllers/donations.controller';
 import { removeUserFromEvent } from './services/events.service';
 
 const routes = express.Router();
@@ -19,11 +19,11 @@ routes.get('/api/getUsers', getUsers);
 
 routes.post('/api/createEvent', validateJwtToken, validateEventFields, handleValidationResult, checkIfEventExists, createEvent);
 
-routes.get('/api/getEvent', getEvent);
+routes.get('/api/event', event);
 
-routes.get('/api/homepage/getEvents', getEventsHomepage);
+routes.get('/api/homepage/events', eventsHomepage);
 
-routes.get('/api/profile/getEvents', validateJwtToken, getUserEventDetails);
+routes.get('/api/profile/events', validateJwtToken, userEventDetails);
 
 routes.post('/api/signForEvent', validateJwtToken, validateEventIsActive, addVolunteerToEvent);
 
@@ -33,7 +33,7 @@ routes.get('/api/sendPdfToEmail', validateJwtToken, validateEventIsFinished, sen
 
 routes.post('/api/donate', validateJwtToken, makeDonation);
 
-routes.get('/api/donations', validateJwtToken, getUserDonationDetails);
+routes.get('/api/donations', validateJwtToken, userDonationDetails);
 
 routes.put('/api/profile/updateEmail', validateJwtToken, updateProfileEmail);
 

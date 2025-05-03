@@ -62,7 +62,7 @@ export const removeVolunteerFromEvent = async(req: Request, res: Response, next:
     }
 }
 
-export const getEventsHomepage = async(req: Request, res: Response, next: NextFunction) => {
+export const eventsHomepage = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const events = await getAllEventsDocs();
         res.status(200).json(events);
@@ -71,7 +71,7 @@ export const getEventsHomepage = async(req: Request, res: Response, next: NextFu
     }
 };
 
-export const getUserEventDetails = async(req: Request, res: Response, next: NextFunction) => {
+export const userEventDetails = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userId = req.query.userId as string;
         const eventIds = await getUserEvents(userId);
@@ -82,7 +82,7 @@ export const getUserEventDetails = async(req: Request, res: Response, next: Next
     }
 }
 
-export const getEvent = async(req: Request, res: Response, next: NextFunction) => {
+export const event = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const eventId = req.query.eventId as string;
         if(!eventId){

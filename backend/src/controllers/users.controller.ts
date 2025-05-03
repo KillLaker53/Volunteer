@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { createUser, determineUserRole, getUserByEmail, getUserDoc, getUsersDocs, updateEmailProfileDoc, updatePhoneProfileDoc} from '../services/user.service'
+import { createUser, determineUserRole, getUserByEmail, getUserDoc, getUsersDocs, updateEmailProfileDoc, updatePhoneProfileDoc, updateProfileRoleDoc} from '../services/user.service'
 import { IUser } from '../models/users'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -56,6 +56,8 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
 export const loginUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
+        
+        //extract to - is valid user function
         const {email, password} = req.body;
         const user = await getUserByEmail(email); 
         
@@ -162,5 +164,17 @@ export const updateProfilePhone = async(req: Request, res: Response, next: NextF
         console.error(err);
         res.status(500).json({message: "An internal error has occurred"});
         return;
+    }
+}
+
+export const updateProfileRole = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.body.userId;
+        const newRole = req.body.newRole;
+        await updateProfileRoleDoc(userId, newRole);
+        res.status(200).json({message: "User role updated successfully"});
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: "An internal error has occurred"});
     }
 }
