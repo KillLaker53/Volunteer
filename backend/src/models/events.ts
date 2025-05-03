@@ -3,6 +3,7 @@ import mongoose, {model, Model, Schema } from 'mongoose';
 import { Location } from '../library/types';
 
 export interface IEvent {
+    creatorId: Schema.Types.ObjectId;
     eventName: string;
     description: string;
     eventType: EventType;
@@ -14,11 +15,13 @@ export interface IEvent {
     fundingNeeded: number;
     volunteers: Array<Schema.Types.ObjectId>;
     status: Status;
+    is_approved: boolean;
 }
 
 export type EventModel = Model<IEvent>;
 
 const EventSchema: Schema = new Schema<IEvent, EventModel>({
+    creatorId: {type: Schema.Types.ObjectId, ref: 'Users'},
     eventName: {type: String},
     description: {type: String},
     eventType: {type: String},
@@ -38,8 +41,8 @@ const EventSchema: Schema = new Schema<IEvent, EventModel>({
     },
     fundingNeeded: {type: Number},
     volunteers: {type: [mongoose.Schema.Types.ObjectId], ref: 'Users'},
-    status: {type: String}
-
+    status: {type: String},
+    is_approved: {type: Boolean}
 }, {collection: "Events"});
 
 EventSchema.index({location: '2dsphere'});

@@ -22,7 +22,8 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
             volunteers: [],
             address: address,
             location: location,
-            status: Status.On_Going
+            status: Status.On_Going,
+            is_approved: false,
         }   
         
         const createdEvent: IEvent = await createEventDoc(eventData);
