@@ -160,3 +160,18 @@ export const updatePhoneProfileDoc = async(userId: string, newPhone: string) => 
         throw new Error(`Error updating the phone of user ${userId} - ${err}`);
     }
 }
+
+export const updateProfileRoleDoc = async(userId: string, newRole: string) => {
+    try{
+        const result = await User.updateOne(
+            {_id: userId},
+            {$set: {role: newRole}}
+        );
+        if(result.modifiedCount !== 1) {
+            throw new Error("Error why trying to update the role of a user");
+        }
+
+    }catch(err){
+        throw new Error(`Error updating the role of user ${userId} - ${err}`)
+    }
+}

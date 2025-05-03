@@ -3,6 +3,9 @@ import { body } from 'express-validator'
 import { IUser, User } from '../models/users';
 import { SECRET_KEY } from '../library/constants';
 import jwt from 'jsonwebtoken';
+import { DecodedToken } from '../library/types';
+import { getUserByEmail } from '../services/user.service';
+import bcrypt from 'bcryptjs';
 export const validateUserFields = [
     body('username').notEmpty().isString(),
     body('password').isLength({min: 4}).isString(),
@@ -47,5 +50,52 @@ export const validateJwtToken = async(req: Request, res: Response, next: NextFun
     }catch(err){
         console.error(err);
         res.status(500).json({message: "An internal error has occurred"});
+    }
+}
+
+export const validateAdminRole = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const token: string | undefined = req.header('Authorization')?.split(" ")[1];
+        if(!token){
+            res.status(401).json({message: "Access denied. No token provided"});
+            return;
+        }
+
+        if(!SECRET_KEY){
+            throw new Error("JWT secret is not defined");
+        }
+        const decodedToken: DecodedToken = jwt.verify(token, SECRET_KEY) as DecodedToken;
+        if(decodedToken.role !== "admin"){
+            throw new Error("Access denied. User's role is not sufficient to try this action");
+        }
+        
+        next();
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: "An internal error has occurred"});
+    }
+}
+
+export const validateUserCredentials = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const { email, password } = req.body;
+        const user = await getUserByEmail(email);
+        if(!user || await validatePassword(password, user.password)){
+            res.status(400).json({message:"This user does not exist"});
+            return;
+        }
+        res.locals.user = user;
+        next();
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: "An internal error has occurred"});
+    }
+}
+
+export const validatePassword = async(password: string, userPassword: string) => {
+    try{
+        return await bcrypt.compare(password, userPassword);
+    }catch(err){
+        throw new Error(`Error validating password : ${err}`)
     }
 }

@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import { SECRET_KEY } from '../library/constants'
 import { UserDto } from 'types-api-volunteer/src'
 import { getEventDoc } from '../services/events.service'
-import { generateCertificate, sendCertificateToEmail } from '../library/utils'
+import { generateCertificate, sendCertificateToEmail, signJwt } from '../library/utils'
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -27,20 +27,10 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         };
 
         const createdUser = await createUser(userData);
-        // TODO EXTRACT JWT TO FUNCTION AND SEND ONLY JWT TO FRONTEND
-        const token = jwt.sign(
-            {
-                id: createdUser._id.toString(),
-                email: createdUser.email,
-                role: createdUser.role,
-            },
-            SECRET_KEY, 
-            { expiresIn: "1h" }
-        );
-        const data = createdUser;
+
+        const token = signJwt(createdUser._id, createdUser.email, createdUser.role);
         res.status(201).json({
-            token,
-            data
+            token
         });
 
     } catch (err: any) {
@@ -57,35 +47,10 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 export const loginUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
         
-        //extract to - is valid user function
-        const {email, password} = req.body;
-        const user = await getUserByEmail(email); 
-        
-        if(!user){
-            res.status(400).json({message: "This user does not exist"});
-            return;
-        }
-    
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        
-        if(!isPasswordValid){
-            res.status(400).json({message: "Invalid password"});
-            return;
-        }
-        const data = user;
-        const token = jwt.sign(
-            {
-                id: user._id.toString(),
-                email: user.email,
-                role: user.role,
-            },
-            SECRET_KEY, 
-            { expiresIn: "1h" }
-        );
-
+        const user = res.locals.user;
+        const token = signJwt(user._id, user.email, user.role);
         res.status(200).json({
-            token,
-            data
+            token
         });
         return;
         
