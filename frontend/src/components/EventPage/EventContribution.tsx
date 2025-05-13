@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EventPageDto, UserDto } from "types-api-volunteer/src";
 import "./EventContribution.css";
 import { useNavigate } from "react-router-dom";
 import { signUpForEvent } from "../../api/EventApi";
 import Popup from "../Shared/Popup";
 import { fetchStripeUrl } from "../../api/DonationApi";
+import { jwtDecode } from "jwt-decode";
+import { DecodedToken } from "../../library/types";
 
 interface EventContributionProps {
   event: EventPageDto;
@@ -14,29 +16,21 @@ interface EventContributionProps {
 const EventContribution: React.FC<EventContributionProps> = ({ event, isLoggedIn }) => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMode, setPopupMode] = useState<"signup" | "donation">("signup");
+  const [decodedToken, setDecodedToken] = useState<string>("");
   const navigate = useNavigate();
-
   const onSignUpForEvent = async () => {
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
-
-    const stringUserData = localStorage.getItem("userData");
-    if (!stringUserData) {
-      throw new Error("There was a problem getting user data");
+    const token = localStorage.getItem('token');
+    if(!token){
+      throw new Error("token not found");
     }
-
-    const parsedUserData: UserDto = JSON.parse(stringUserData);
-    const userId = parsedUserData._id;
     const eventId = event._id;
 
     try {
-      const token = localStorage.getItem('token');
-      if(!token){
-        throw new Error("token not found");
-      }
-      await signUpForEvent(token, userId, eventId);
+      await signUpForEvent(token, eventId);
       setPopupMode("signup");
       setShowPopup(true);
     } catch (err) {
@@ -51,15 +45,10 @@ const EventContribution: React.FC<EventContributionProps> = ({ event, isLoggedIn
 
   const handleDonation = async(amount: number) => {
     const token = localStorage.getItem('token');
-    const userDataString = localStorage.getItem('userData');
-    let userId;
-    if(userDataString){
-      const userData: UserDto = JSON.parse(userDataString);
-      userId = userData._id;
-    }
     
-    if(token && userId){
-      const stripe_checkout = await fetchStripeUrl(token, amount, userId, event._id);
+    
+    if(token){
+      const stripe_checkout = await fetchStripeUrl(token, amount, event._id);
       window.open(stripe_checkout, '_blank');
     
     } else{
