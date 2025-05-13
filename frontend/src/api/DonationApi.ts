@@ -1,13 +1,14 @@
 import { UserDonationDto } from "types-api-volunteer/src";
-
-export const fetchStripeUrl = async(token: string, amount: number, userId: string, eventId: string) => {
-    const response = await fetch('http://localhost:5000/api/donate', {
+import {baseUrl} from '../library/constants';
+export const fetchStripeUrl = async(token: string, amount: number, eventId: string) => {
+    
+    const response = await fetch(`${baseUrl}/api/donate`, {
         method: 'POST',
         headers: {
             'Authorization' : `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({amount, userId, eventId}),
+        body: JSON.stringify({amount, eventId}),
     });
     if(!response.ok){
         throw new Error("Error fetching data");
@@ -17,9 +18,10 @@ export const fetchStripeUrl = async(token: string, amount: number, userId: strin
 }
 
 export const fetchUserDonations = async(token: string, userId: string) => {
-    const response = await fetch(`http://localhost:5000/api/donations?token=${encodeURIComponent(token)}&userId=${encodeURIComponent(userId)}`, {
+    const response = await fetch(`${baseUrl}/api/donations`, {
         method: 'GET',
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
         }
         

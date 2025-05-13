@@ -24,3 +24,9 @@ export const eventDescriptionDate = require("../images/event-description-date.pn
 export const eventDescriptionLocation = require("../images/event-description-location.png");
 
 export const redPdf = require("../images/red-pdf.png");
+
+export const adminIcon = require("../images/adminIcon.png");
+
+export const roleOptions = ["volunteer", "organization", "admin"] as const;
+
+export const baseUrl = "http://localhost:5000";

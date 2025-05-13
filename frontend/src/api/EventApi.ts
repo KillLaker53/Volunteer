@@ -1,9 +1,10 @@
 import { SidebarEventDto, EventLocationDto, EventPageDto, UserEventDto } from 'types-api-volunteer/src/index';
+import { baseUrl } from '../library/constants';
 
 export const fetchEvents = async() => {
     try{
    
-        const response = await fetch('http://localhost:5000/api/homepage/events');
+        const response = await fetch(`${baseUrl}/api/homepage/events`);
         if(!response.ok){
             throw new Error('Failed to fetch events');
         }
@@ -29,7 +30,7 @@ export const fetchEventCoordinates = (events: SidebarEventDto[]): EventLocationD
 export const fetchEvent = async(eventId: string) => {
     try{
      
-        const response = await fetch(`http://localhost:5000/api/event?eventId=${encodeURIComponent(eventId)}`, {
+        const response = await fetch(`${baseUrl}/api/events/${encodeURIComponent(eventId)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,16 +51,16 @@ export const fetchEvent = async(eventId: string) => {
 
 }
 
-export const signUpForEvent = async(token: string, userId: string, eventId: string) => {
+export const signUpForEvent = async(token: string, eventId: string) => {
         
-        const response = await fetch('http://localhost:5000/api/signForEvent', 
+        const response = await fetch(`${baseUrl}/api/events/${encodeURIComponent(eventId)}/volunteers`, 
             {
                 method:'POST',
                 headers: {
                     'Authorization' : `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({userId, eventId}),
+                body: JSON.stringify({eventId}),
             }
         )
 
@@ -72,7 +73,7 @@ export const signUpForEvent = async(token: string, userId: string, eventId: stri
 
 export const fetchUserEvents = async (token: string, userId: string): Promise<UserEventDto[]> => {
     try {
-        const response = await fetch(`http://localhost:5000/api/profile/events?userId=${userId}`, {
+        const response = await fetch(`${baseUrl}/api/users/me/events?userId=${userId}`, {
             method: 'GET',
             headers: {
                 'Authorization' : `Bearer ${token}`,
@@ -110,7 +111,7 @@ export const createEvent = async(
         const endDate = new Date(endDateNotFormated.replace(', ', 'T')).toISOString();
         const requirements = requirementsString.split(',').map(requirement => requirement.trim());
         const fundingNeeded = Number(funding);
-        const response = await fetch('http://localhost:5000/api/createEvent', {
+        const response = await fetch(`${baseUrl}/api/events`, {
             method: 'POST',
             headers: {
                 'Authorization' : `Bearer ${token}`,
