@@ -16,7 +16,7 @@ export const fetchEvents = async() => {
     }
 }
 
-export const fetchEventCoordinates = (events: SidebarEventDto[]): EventLocationDto[] => {
+export const fetchEventCoordinates = (events: SidebarEventDto[]) => {
     return events.map((event) => {
         return {
             _id: event._id,
@@ -130,3 +130,27 @@ export const createEvent = async(
         console.error(error);
     }
 }
+
+export const fetchUnapprovedEvents = async() => {
+
+}
+
+export const filterEventsByName = async (eventName: string) => {
+    try {
+        
+        const response = await fetch(`${baseUrl}/api/events/search?eventName=${encodeURIComponent(eventName)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            const errorMessage = await response.json();
+            throw new Error(errorMessage.message || 'Error fetching events');
+        }
+        const events = await response.json();
+        return events;
+    } catch (err) {
+        console.error(err);
+    }
+};

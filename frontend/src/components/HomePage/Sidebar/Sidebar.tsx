@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ events, setEvents, onClose,  onEventC
         </button>
         <h2 id="sidebar-title">Events</h2>
       </div>
-      <SearchBar events={events} setEvents={setEvents}/>
+      <SearchBar setEvents={setEvents}/>
       <CreateEvent />
       <EventList events={events} onEventClick={onEventClick}/>
     </div>

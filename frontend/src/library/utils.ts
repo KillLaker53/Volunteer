@@ -15,10 +15,3 @@ export const getEventIcon = (eventType: string) => {
     
 }
 
-export const filterSidebarEventsByName = (name: string, events: SidebarEventDto[]) => {
-  const filteredEvents = events.filter((event) => {
-    return event.eventName.includes(name);
-  });
-  return filteredEvents;
-
-}

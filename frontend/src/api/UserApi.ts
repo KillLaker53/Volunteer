@@ -80,7 +80,7 @@ export const fetchAndSendPdf = async(userId: string, eventId: string) => {
     const response = await fetch(`${baseUrl}/api/users/me/certificate-email`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application-json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({eventId})
     });
