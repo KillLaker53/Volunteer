@@ -1,78 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
 import Button from '../HomePage/Button';
-import { myProfileIcon } from '../../library/constants';
-import { UserDto } from 'types-api-volunteer/src';
+import { adminIcon, myProfileIcon } from '../../library/constants';
+import { DecodedToken } from '../../library/types';
+import { jwtDecode } from 'jwt-decode';
 
-interface HeaderProps{
+interface HeaderProps {
   isLoggedIn: boolean;
   setIsLoggedIn: (arg0: boolean) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({isLoggedIn, setIsLoggedIn}) => {
-  const navigate = useNavigate(); 
+const Header: React.FC<HeaderProps> = ({ isLoggedIn, setIsLoggedIn }) => {
+  const navigate = useNavigate();
+  const [role, setRole] = useState<string | null>(null);
+  const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null);
 
-  const handleSignInClick = () => {
-    navigate('/login');
-  }
-
-  const handleSignOutClick = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userData');
-    setIsLoggedIn(false);
-    navigate('/');
-  }
-
-  const handleProfileClick = () => {
+  useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
     } else {
-      const userDataString = localStorage.getItem('userData');
-      if (userDataString) {
-        try {
-          const userData: UserDto = JSON.parse(userDataString); 
-          const userId: string = userData._id;
-          if (!userId) {
-            console.log("User ID is not found");
-            return; 
-          }
-          navigate(`/profile/${userId}`);
-        } catch (error) {
-          console.error("Error parsing user data", error);
-        }
-      } else {
-        console.log("User data is not found");
+      try {
+        const decoded: DecodedToken = jwtDecode(token);
+        setDecodedToken(decoded);
+        setRole(decoded.role);
+      } catch (err) {
+        console.log("Error decoding token", err);
+        navigate('/login');
       }
+    }
+  }, [navigate]);
+
+  const handleSignInClick = () => {
+    navigate('/login');
+  };
+
+  const handleSignOutClick = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
+
+  const handleAdminMenuClick = () => {
+    navigate('/admin');
+  };
+
+  const handleProfileClick = () => {
+    if (decodedToken && decodedToken.id) {
+      navigate(`/profile/${decodedToken.id}`);
+    } else {
+      console.log("Error finding the user");
+      navigate('/login');
     }
   };
 
   const handleMapClick = () => {
     navigate('/');
-  }
+  };
 
   return (
-  
     <div className='header'>
-        <div className='logo'>
-        <h1> Volunteer </h1>
-        </div>
-        
-        
-        <div className='button-container'>
-          <Button onClick={handleProfileClick} icon={myProfileIcon}>Profile</Button>
-          <Button onClick={handleMapClick}>Map</Button>
-          {
-            isLoggedIn
-                ? <Button onClick={handleSignOutClick}>Sign out</Button>
-                : <Button onClick={handleSignInClick}>Sign in</Button>
-          }
-        </div>
-        
-     
-   
+      <div className='logo'>
+        <h1>Volunteer</h1>
+      </div>
+      <div className='button-container'>
+        {isLoggedIn && role === "admin" && (
+          <Button onClick={handleAdminMenuClick} icon={adminIcon}>Admin</Button>
+        )}
+
+        <Button onClick={handleProfileClick} icon={myProfileIcon}>Profile</Button>
+        <Button onClick={handleMapClick}>Map</Button>
+
+        {isLoggedIn ? (
+          <Button onClick={handleSignOutClick}>Sign out</Button>
+        ) : (
+          <Button onClick={handleSignInClick}>Sign in</Button>
+        )}
+      </div>
     </div>
   );
 };
