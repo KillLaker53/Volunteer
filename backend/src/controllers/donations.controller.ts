@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import Stripe from 'stripe';
-import { STRIPE_SECRET } from '../library/constants';
+import { BASE_URL, STRIPE_SECRET } from '../library/constants';
 import { IDonation } from '../models/donations';
 import { createDonationDoc, getUserDonations } from '../services/donation.service';
 import { UserDonationDto } from 'types-api-volunteer/src';
@@ -13,7 +13,7 @@ const stripe = new Stripe(STRIPE_SECRET, {
 export const makeDonation = async(req: Request, res: Response, next: NextFunction) => {
     try{
     const eventId = req.body.eventId;
-    const userId = req.body.userId;
+    const userId = res.locals.token.id;
     const donationAmount = req.body.amount;
     console.log(donationAmount)
     const session = await stripe.checkout.sessions.create({
@@ -29,8 +29,8 @@ export const makeDonation = async(req: Request, res: Response, next: NextFunctio
             quantity: 1,
         }],
         mode: 'payment',
-        success_url: 'http://localhost:3000/success',
-        cancel_url: 'http://localhost:3000/cancel', 
+        success_url: `${BASE_URL}/success`,
+        cancel_url: `${BASE_URL}/cancel`, 
     });
     const donationData: IDonation = {
         donator: userId,
@@ -47,9 +47,9 @@ export const makeDonation = async(req: Request, res: Response, next: NextFunctio
     }
 }
 
-export const userDonationDetails = async(req: Request, res: Response, next: NextFunction) => {
+export const getUserDonationDetails = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const userId = req.query.userId as string;
+        const userId = res.locals.token.id;
         const userDonations = await getUserDonations(userId);
         const eventIds = userDonations.map(donation => donation.event.toString());
         const events = await getDonationEventDocs(eventIds);

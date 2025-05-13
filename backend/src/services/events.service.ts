@@ -37,7 +37,7 @@ export const addUserToEventHistory = async(volunteerId: string, eventId: string)
 
 }
 
-export const removeUserFromEvent = async(volunteerId: Types.ObjectId, eventId: Types.ObjectId) => {
+export const removeUserFromEvent = async(volunteerId: string, eventId: string) => {
     try{
         const result = await Event.findByIdAndUpdate(
             eventId, 

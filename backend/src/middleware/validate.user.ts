@@ -43,7 +43,8 @@ export const validateJwtToken = async(req: Request, res: Response, next: NextFun
             if(!SECRET_KEY){
                 throw new Error("JWT secret is not defined")
             }
-            jwt.verify(token, SECRET_KEY); 
+            const decodedToken = jwt.verify(token, SECRET_KEY);
+            res.locals.token = decodedToken; 
             next();
         }
         
@@ -80,8 +81,9 @@ export const validateUserCredentials = async(req: Request, res: Response, next: 
     try{
         const { email, password } = req.body;
         const user = await getUserByEmail(email);
+        
         if(!user || await validatePassword(password, user.password)){
-            res.status(400).json({message:"This user does not exist"});
+            res.status(400).json({message:"Wrong password or email"});
             return;
         }
         res.locals.user = user;
@@ -94,7 +96,7 @@ export const validateUserCredentials = async(req: Request, res: Response, next: 
 
 export const validatePassword = async(password: string, userPassword: string) => {
     try{
-        return await bcrypt.compare(password, userPassword);
+        return await bcrypt.compare(userPassword, password);
     }catch(err){
         throw new Error(`Error validating password : ${err}`)
     }

@@ -10,8 +10,10 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
     try{
         const address = req.body.address;
         const location: Location = await geocodeLocation(address);
-        
+        const creatorId = res.locals.token.id;
+
         const eventData: IEvent = {
+            creatorId: creatorId,
             eventName: req.body.eventName,
             description: req.body.description,
             eventType: req.body.eventType,
@@ -25,7 +27,6 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
             status: Status.On_Going,
             is_approved: false,
         }   
-        
         const createdEvent: IEvent = await createEventDoc(eventData);
         notifyUsers(createdEvent);
         res.status(201).json(createdEvent);
@@ -37,7 +38,7 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
 
 export const addVolunteerToEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const volunteerId = req.body.userId;
+        const volunteerId = res.locals.token.id;
         const eventId = req.body.eventId; 
         const updatedEvent = await addUserToEventHistory(volunteerId, eventId);
         addEventToUserHistory(volunteerId, eventId);
@@ -53,7 +54,7 @@ export const addVolunteerToEvent = async(req: Request, res: Response, next: Next
 export const removeVolunteerFromEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const volunteerId = req.body.volunteerId;
-        const eventId = req.body.eventId;
+        const eventId = req.params.eventId;
         const updatedEvent = await removeUserFromEvent(volunteerId, eventId);
         res.status(201).json(updatedEvent);
         return;
@@ -63,7 +64,7 @@ export const removeVolunteerFromEvent = async(req: Request, res: Response, next:
     }
 }
 
-export const eventsHomepage = async(req: Request, res: Response, next: NextFunction) => {
+export const getEventsHomepage = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const events = await getAllEventsDocs();
         res.status(200).json(events);
@@ -72,7 +73,7 @@ export const eventsHomepage = async(req: Request, res: Response, next: NextFunct
     }
 };
 
-export const userEventDetails = async(req: Request, res: Response, next: NextFunction) => {
+export const getUserEventDetails = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userId = req.query.userId as string;
         const eventIds = await getUserEvents(userId);
@@ -83,14 +84,14 @@ export const userEventDetails = async(req: Request, res: Response, next: NextFun
     }
 }
 
-export const event = async(req: Request, res: Response, next: NextFunction) => {
+export const getEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const eventId = req.query.eventId as string;
-        if(!eventId){
-            res.status(404).json({message: "Missing required query parameter: eventId"});
-        }
+        const eventId = req.params.eventId;
         const event = await getEventDoc(eventId);
-        
+        if(!event){
+            res.status(404).json({message: "Event not found"});
+            return;
+        } 
         res.status(200).json(event);
         return;
     }catch(err){

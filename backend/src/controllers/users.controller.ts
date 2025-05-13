@@ -48,7 +48,8 @@ export const loginUser = async(req: Request, res: Response, next: NextFunction) 
     try{
         
         const user = res.locals.user;
-        const token = signJwt(user._id, user.email, user.role);
+        const token = await signJwt(user._id, user.email, user.role);
+        
         res.status(200).json({
             token
         });
@@ -74,8 +75,8 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 
 export const getUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const userId = req.query.userId as string;
-
+        const userId = req.params.userId;
+        
         if(!userId){
             res.status(404).json({message: "Missing required query parameter"});
             return;
@@ -91,8 +92,8 @@ export const getUser = async(req: Request, res: Response, next: NextFunction) =>
 
 export const sendCertificate = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const userId = req.query.userId as string;
-        const eventId = req.query.eventId as string;
+        const userId = res.locals.token.id;
+        const eventId = req.body.eventId;
         const user = await getUserDoc(userId);
         const event = await getEventDoc(eventId);
         const pdfCertificate = await generateCertificate(user.firstName, user.lastName, event.eventName, event.date);
@@ -108,7 +109,7 @@ export const sendCertificate = async(req: Request, res: Response, next: NextFunc
 
 export const updateProfileEmail = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const userId = req.body.userId;
+        const userId = res.locals.token.id;
         const newEmail = req.body.email;
         await updateEmailProfileDoc(userId, newEmail);
         res.status(201).json({message: "Successfully updated email"});
@@ -121,7 +122,7 @@ export const updateProfileEmail = async(req: Request, res: Response, next: NextF
 
 export const updateProfilePhone = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const userId = req.body.userId;
+        const userId = res.locals.token.id;
         const newPhone = req.body.phone;
         await updatePhoneProfileDoc(userId, newPhone);
         res.status(200).json({message: "Successfully updated phone"});
