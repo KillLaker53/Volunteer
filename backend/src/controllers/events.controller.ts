@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { IEvent } from '../models/events';
-import { addUserToEventHistory, createEventDoc, getAllEventsDocs, getEventDoc, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
+import { addUserToEventHistory, createEventDoc, getAllEventsDocs, getEventDoc, getEventsByNameDocs, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
 import { geocodeLocation } from '../library/utils';
 import { Location, Status} from '../library/types';
 import { addEventToUserHistory, getUserEvents, notifyUsers } from '../services/user.service';
@@ -100,3 +100,24 @@ export const getEvent = async(req: Request, res: Response, next: NextFunction) =
     }
 
 }
+export const getEventsByName = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const eventName: string | undefined = req.query.eventName as string | undefined;
+        const events = eventName
+            ? await getEventsByNameDocs(eventName)
+            : await getAllEventsDocs();
+
+        if (!events || events.length === 0) {
+            res.status(404).json({ message: "No events found" });
+            return;
+        }
+        console.log(events);
+
+        res.status(200).json(events);
+        return;
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "An internal server error occurred" });
+        return;
+    }
+};

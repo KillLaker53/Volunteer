@@ -74,7 +74,7 @@ export const getAllEventsDocs = async() => {
     try {
         const filter ={};
         const events = await Event.find(filter);
-
+        
         const transformedEvents: SidebarEventDto[]  = events.map(event => ({
             _id: event.id,
             eventName: event.eventName,
@@ -158,5 +158,24 @@ export const getDonationEventDocs = async(eventIds: string[]) => {
         return events;
     }catch(err){
         throw new Error("Error while fetching data for donations from the database")
+    }
+}
+
+export const getEventsByNameDocs = async(eventName: string) => {
+    try{
+        const events = await Event.find({eventName: {$regex: eventName}})
+        
+        const transformedEvents: SidebarEventDto[]  = events.map(event => ({
+            _id: event.id,
+            eventName: event.eventName,
+            eventType: event.eventType,
+            startDate: event.startDate.toISOString(),
+            endDate: event.endDate.toISOString(),
+            location: event.location.coordinates,
+            status: event.status,
+        }));
+        return transformedEvents;
+    }catch(err){
+        throw new Error(`Error while trying to fetch data from database ${err}` );
     }
 }

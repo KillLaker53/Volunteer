@@ -3,10 +3,10 @@ import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProf
 import { validateUserFields, validateLoginFields, checkIfUserExists, validateJwtToken, validateUserCredentials, validateAdminRole } from './middleware/validate.user';
 import { validateEventFields, checkIfEventExists, validateEventIsActive, validateEventIsFinished } from './middleware/validate.event';
 import { handleValidationResult } from './middleware/handle.validation.result';
-import { addVolunteerToEvent, createEvent, getEvent, removeVolunteerFromEvent, getEventsHomepage, getUserEventDetails } from './controllers/events.controller';
+import { addVolunteerToEvent, createEvent, getEvent, removeVolunteerFromEvent, getEventsHomepage, getUserEventDetails, getEventsByName } from './controllers/events.controller';
 import { makeDonation, getUserDonationDetails } from './controllers/donations.controller';
 
- const routes = express.Router();
+const routes = express.Router();
 
 routes.post('/api/register', validateUserFields, handleValidationResult, checkIfUserExists, registerUser);
 
@@ -17,6 +17,8 @@ routes.get('/api/users/:userId', getUser);
 routes.get('/api/users', getUsers);
 
 routes.post('/api/events', validateJwtToken, validateEventFields, handleValidationResult, checkIfEventExists, createEvent);
+
+routes.get('/api/events/search', getEventsByName);
 
 routes.get('/api/events/:eventId', getEvent);
 
@@ -40,6 +42,6 @@ routes.patch('/api/users/:userID/phone', validateJwtToken, updateProfilePhone);
 
 routes.patch('/api/users/:userId/role', validateAdminRole, updateProfileRole);
 
-routes.patch('/api/events/:eventId/approval');
+routes.patch('/api/events/:eventId/approval', validateAdminRole);
 
 export default routes;

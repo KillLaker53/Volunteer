@@ -11,7 +11,7 @@ import { PORT } from "./config/config";
 const app = express();
 app.use(cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json());
