@@ -1,42 +1,45 @@
 import express from 'express';
-import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProfileEmail, updateProfilePhone } from './controllers/users.controller';
-import { validateUserFields, validateLoginFields, checkIfUserExists, validateJwtToken } from './middleware/validate.user';
+import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProfileEmail, updateProfilePhone, updateProfileRole } from './controllers/users.controller';
+import { validateUserFields, validateLoginFields, checkIfUserExists, validateJwtToken, validateUserCredentials, validateAdminRole } from './middleware/validate.user';
 import { validateEventFields, checkIfEventExists, validateEventIsActive, validateEventIsFinished } from './middleware/validate.event';
 import { handleValidationResult } from './middleware/handle.validation.result';
-import { addVolunteerToEvent, createEvent, event, eventsHomepage,  userEventDetails, removeVolunteerFromEvent } from './controllers/events.controller';
-import { userDonationDetails, makeDonation } from './controllers/donations.controller';
-import { removeUserFromEvent } from './services/events.service';
+import { addVolunteerToEvent, createEvent, getEvent, removeVolunteerFromEvent, getEventsHomepage, getUserEventDetails } from './controllers/events.controller';
+import { makeDonation, getUserDonationDetails } from './controllers/donations.controller';
 
-const routes = express.Router();
+ const routes = express.Router();
 
 routes.post('/api/register', validateUserFields, handleValidationResult, checkIfUserExists, registerUser);
 
-routes.post('/api/login', validateLoginFields, loginUser);
+routes.post('/api/login', validateUserCredentials, validateLoginFields, loginUser);
 
-routes.get('/api/getUser', getUser);
+routes.get('/api/users/:userId', getUser);
 
-routes.get('/api/getUsers', getUsers);
+routes.get('/api/users', getUsers);
 
-routes.post('/api/createEvent', validateJwtToken, validateEventFields, handleValidationResult, checkIfEventExists, createEvent);
+routes.post('/api/events', validateJwtToken, validateEventFields, handleValidationResult, checkIfEventExists, createEvent);
 
-routes.get('/api/event', event);
+routes.get('/api/events/:eventId', getEvent);
 
-routes.get('/api/homepage/events', eventsHomepage);
+routes.get('/api/homepage/events', getEventsHomepage);
 
-routes.get('/api/profile/events', validateJwtToken, userEventDetails);
+routes.get('/api/users/me/events', validateJwtToken, getUserEventDetails);
 
-routes.post('/api/signForEvent', validateJwtToken, validateEventIsActive, addVolunteerToEvent);
+routes.post('/api/events/:eventId/volunteers', validateJwtToken, validateEventIsActive, addVolunteerToEvent);
 
-routes.post('/api/unsignForEvent', validateJwtToken, validateEventIsActive, removeVolunteerFromEvent);
+routes.delete('/api/events/:eventId/volunteers', validateJwtToken, validateEventIsActive, removeVolunteerFromEvent);
 
-routes.get('/api/sendPdfToEmail', validateJwtToken, validateEventIsFinished, sendCertificate);
+routes.post('/api/users/me/certificate-email', validateJwtToken, validateEventIsFinished, sendCertificate);
 
 routes.post('/api/donate', validateJwtToken, makeDonation);
 
-routes.get('/api/donations', validateJwtToken, userDonationDetails);
+routes.get('/api/donations', validateJwtToken, getUserDonationDetails);
 
-routes.put('/api/profile/updateEmail', validateJwtToken, updateProfileEmail);
+routes.patch('/api/users/:userId/email', validateJwtToken, updateProfileEmail);
 
-routes.put('/api/profile/updatePhone', validateJwtToken, updateProfilePhone);
+routes.patch('/api/users/:userID/phone', validateJwtToken, updateProfilePhone);
+
+routes.patch('/api/users/:userId/role', validateAdminRole, updateProfileRole);
+
+routes.patch('/api/events/:eventId/approval');
 
 export default routes;
