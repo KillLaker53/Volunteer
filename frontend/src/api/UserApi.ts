@@ -113,3 +113,27 @@ export const updateUserRole = async(token: string, userId: string, newRole: stri
         console.error(err);
     }   
 }
+
+export const updateField = async(token: string, updatedValue: Partial<UserDto>) => {
+    try{
+        console.log(updatedValue);
+        const response = await fetch(`${baseUrl}/api/users/update`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedValue)
+            }
+        )
+        if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+        return response;
+    }catch(err){
+        console.error(err);
+    }
+
+}
