@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { createUser, getUserByEmail, getUserDoc, getUsersDocs, updatePhoneProfileDoc, updateProfileField, updateProfileRoleDoc} from '../services/user.service'
+import { createUser, getUserByEmail, getUserDoc, getUsersDocs, updateProfileField, updateProfileRoleDoc} from '../services/user.service'
 import { IUser } from '../models/users'
 import bcrypt from 'bcryptjs'
 import { UserDto } from 'types-api-volunteer/src'

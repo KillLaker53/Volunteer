@@ -6,6 +6,7 @@ import EventPage from './components/EventPage/EventPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import CreateEventPage from './components/CreateEventPage/CreateEventPage';
+import AdminPage from './components/AdminPage/AdminPage';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path='/event/:eventId' element={<EventPage />} />
         <Route path='/profile/:userId' element={<ProfilePage />}/>
         <Route path='/createEvent' element={<CreateEventPage />}/>
+        <Route path='/admin' element={<AdminPage />} />
       </Routes>
     </Router>
   );

@@ -120,7 +120,6 @@ export const createEvent = async(
             body: JSON.stringify({eventName, description, eventType, startDate, endDate, requirements, address, fundingNeeded})
         });
 
-        console.log(await response.json());
         if(!response.ok) {
             const errorMessage = await response.json();
             throw new Error(errorMessage);

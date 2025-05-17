@@ -1,0 +1,33 @@
+.admin-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    background: linear-gradient(to right, #ffe298, #ffdd94);
+    font-size: 3rem;
+    font-weight: bold;
+    color: #222;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header select {
+    font-size: 30px;
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.4rem 0.75rem;
+    
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #333;
+    transition: border-color 0.2s ease;
+}
+
+.admin-header select:focus {
+    outline: none;
+    border-color: #888;
+    box-shadow: 0 0 0 2px rgba(100, 100, 255, 0.2);
+}
