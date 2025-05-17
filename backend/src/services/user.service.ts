@@ -3,7 +3,6 @@ import { ADMIN_EMAIL } from '../library/constants';
 import  { User, IUser } from '../models/users'
 import { UserRole } from '../library/types';
 import { UserDto } from 'types-api-volunteer/src';
-import { getUserEventsDocs } from './events.service';
 import { sendEventNotification } from '../library/utils';
 import { IEvent } from '../models/events';
 
@@ -72,20 +71,6 @@ export const getUsersDocs = async() => {
     }
 }
 
-export const determineUserRole = (email: string) => {
-            
-    let role: UserRole = UserRole.Volunteer;
-
-    if(email.endsWith("@elsys-bg.org")){
-        role = UserRole.Organization;
-    }
-
-    if (ADMIN_EMAIL && new RegExp(ADMIN_EMAIL).test(email)) {
-        role = UserRole.Admin;
-    }
-    return role;
-}
-
 export const addEventToUserHistory = async(userId: string, eventId: string) => {
     try{
         const result = await User.updateOne(
@@ -132,34 +117,22 @@ export const notifyUsers = async(event: IEvent) => {
     }
 }
 
-export const updateEmailProfileDoc = async(userId: string, newEmail: string) => {
+export const updateProfileField = async(userId: string, updatedField: Partial<Record<string, any>>) => {
     try{
         const result = await User.updateOne(
             {_id: userId},
-            {$set: {email: newEmail}}
+            {$set: updatedField},
+            {new: true}
         );
         if(result.modifiedCount !== 1) {
-            throw new Error("Error while trying to update the email of user");
+            throw new Error(`Error while trying to update the ${updatedField}`);
         }
 
     }catch(err){ 
-        throw new Error(`Error updating the email of user: ${userId} failed - ${err}`);
+        throw new Error(`Error updating the  of user: ${userId} failed - ${err}`);
     }
 }
 
-export const updatePhoneProfileDoc = async(userId: string, newPhone: string) => {
-    try{
-        const result = await User.updateOne(
-            {_id: userId},
-            {$set: {phone: newPhone}}
-        );
-        if(result.modifiedCount !== 1) {
-            throw new Error("Error while trying to update phone of user");
-        }
-    }catch(err){
-        throw new Error(`Error updating the phone of user ${userId} - ${err}`);
-    }
-}
 
 export const updateProfileRoleDoc = async(userId: string, newRole: string) => {
     try{

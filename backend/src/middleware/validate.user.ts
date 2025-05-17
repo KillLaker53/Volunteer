@@ -82,7 +82,7 @@ export const validateUserCredentials = async(req: Request, res: Response, next: 
         const { email, password } = req.body;
         const user = await getUserByEmail(email);
         
-        if(!user || await validatePassword(password, user.password)){
+        if(!user || !(await validatePassword(password, user.password))){
             res.status(400).json({message:"Wrong password or email"});
             return;
         }
@@ -94,9 +94,9 @@ export const validateUserCredentials = async(req: Request, res: Response, next: 
     }
 }
 
-export const validatePassword = async(password: string, userPassword: string) => {
+export const validatePassword = async(password: string, hashedPassword: string) => {
     try{
-        return await bcrypt.compare(userPassword, password);
+        return await bcrypt.compare(password, hashedPassword);
     }catch(err){
         throw new Error(`Error validating password : ${err}`)
     }

@@ -40,7 +40,7 @@
     gap: 20px; 
 }
 
-.edit-button {
+.edit-button, .save-button {
     background-color: orange;
     color: white;
     border: none;
@@ -51,7 +51,14 @@
     transition: all 0.3s ease;
 }
 
-.edit-button:hover {
+.edit-button:hover, .save-button:hover {
     background-color: darkorange;
     transform: scale(1.05); 
+}
+
+.user-info-edit-field {
+    border-radius: 15px;
+    border-color: orange;
+    font-size: 20px;
+    padding: 3px;
 }

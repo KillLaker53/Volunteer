@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProfileEmail, updateProfilePhone, updateProfileRole } from './controllers/users.controller';
+import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProfile, updateProfilePhone, updateProfileRole } from './controllers/users.controller';
 import { validateUserFields, validateLoginFields, checkIfUserExists, validateJwtToken, validateUserCredentials, validateAdminRole } from './middleware/validate.user';
 import { validateEventFields, checkIfEventExists, validateEventIsActive, validateEventIsFinished } from './middleware/validate.event';
 import { handleValidationResult } from './middleware/handle.validation.result';
@@ -36,12 +36,12 @@ routes.post('/api/donate', validateJwtToken, makeDonation);
 
 routes.get('/api/donations', validateJwtToken, getUserDonationDetails);
 
-routes.patch('/api/users/:userId/email', validateJwtToken, updateProfileEmail);
 
-routes.patch('/api/users/:userID/phone', validateJwtToken, updateProfilePhone);
 
 routes.patch('/api/users/:userId/role', validateAdminRole, updateProfileRole);
 
 routes.patch('/api/events/:eventId/approval', validateAdminRole);
+
+routes.patch('/api/users/update', validateJwtToken, updateProfile)
 
 export default routes;

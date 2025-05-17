@@ -1,19 +1,18 @@
 import { Request, Response, NextFunction } from 'express'
-import { createUser, determineUserRole, getUserByEmail, getUserDoc, getUsersDocs, updateEmailProfileDoc, updatePhoneProfileDoc, updateProfileRoleDoc} from '../services/user.service'
+import { createUser, getUserByEmail, getUserDoc, getUsersDocs, updatePhoneProfileDoc, updateProfileField, updateProfileRoleDoc} from '../services/user.service'
 import { IUser } from '../models/users'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import { SECRET_KEY } from '../library/constants'
 import { UserDto } from 'types-api-volunteer/src'
 import { getEventDoc } from '../services/events.service'
 import { generateCertificate, sendCertificateToEmail, signJwt } from '../library/utils'
+import { UserRole } from '../library/types'
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const email = req.body.email;
-        const role = determineUserRole(email);
+        const role = UserRole.Volunteer;
 
         const userData: IUser = {
             username: req.body.username,
@@ -107,12 +106,18 @@ export const sendCertificate = async(req: Request, res: Response, next: NextFunc
     }
 }
 
-export const updateProfileEmail = async(req: Request, res: Response, next: NextFunction) => {
+export const updateProfile = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userId = res.locals.token.id;
-        const newEmail = req.body.email;
-        await updateEmailProfileDoc(userId, newEmail);
-        res.status(201).json({message: "Successfully updated email"});
+        const updates = req.body;
+        if(!userId || !updates || Array.isArray(updates)){
+            res.status(400).json({message: "Invalid update request"});
+            return;
+        }
+
+        await updateProfileField(userId, updates);
+        res.status(200).json({message: "Successfully updated email"});
+        return;
     }catch(err){
         console.error(err);
         res.status(500).json({message: "An internal server error has occurred"});
@@ -120,18 +125,6 @@ export const updateProfileEmail = async(req: Request, res: Response, next: NextF
     }
 }
 
-export const updateProfilePhone = async(req: Request, res: Response, next: NextFunction) => {
-    try{
-        const userId = res.locals.token.id;
-        const newPhone = req.body.phone;
-        await updatePhoneProfileDoc(userId, newPhone);
-        res.status(200).json({message: "Successfully updated phone"});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({message: "An internal error has occurred"});
-        return;
-    }
-}
 
 export const updateProfileRole = async(req: Request, res: Response, next: NextFunction) => {
     try{

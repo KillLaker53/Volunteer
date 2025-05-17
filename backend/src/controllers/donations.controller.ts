@@ -40,7 +40,6 @@ export const makeDonation = async(req: Request, res: Response, next: NextFunctio
     }
     const createdDonation = await createDonationDoc(donationData);
 
-    //res.redirect(303, session.url);
     res.status(200).json(session.url);
     }catch(err){
         res.status(500).json({message: "Internal server error"});
