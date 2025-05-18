@@ -1,11 +1,11 @@
 import React  from "react";
 import { eventTitleBackground } from "../../library/constants";
 import './EventPageTitle.css';
-import { EventPageDto } from "types-api-volunteer/src";
+import { EventDto } from "types-api-volunteer/src";
 
 
 interface EventPageTitleProps{
-    event: EventPageDto;
+    event: EventDto;
 }
 
 

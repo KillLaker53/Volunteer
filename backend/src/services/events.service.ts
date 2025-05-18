@@ -2,7 +2,7 @@ import { User, IUser} from '../models/users';
 import { Event, IEvent} from '../models/events';
 import { ObjectId, Types } from 'mongoose';
 import { Location } from '../library/types';
-import { SidebarEventDto, EventPageDto, UserEventDto } from 'types-api-volunteer/src/index';
+import { SidebarEventDto, EventDto, UserEventDto } from 'types-api-volunteer/src/index';
 import { formatDateRange } from '../library/utils';
 
 export const createEventDoc = async(event: IEvent) => {
@@ -72,7 +72,7 @@ export const findNearestEvents = async(userLocation: Location, radius: Number) =
 
 export const getAllEventsDocs = async() => {
     try {
-        const filter ={};
+        const filter = {is_approved: true};
         const events = await Event.find(filter);
         
         const transformedEvents: SidebarEventDto[]  = events.map(event => ({
@@ -125,7 +125,7 @@ export const getEventDoc = async(eventId: string) => {
         }
         const date: string = formatDateRange(event.startDate, event.endDate);
 
-        const transformedEvent: EventPageDto = {
+        const transformedEvent: EventDto = {
             _id: event._id.toString(),
             eventName: event.eventName,
             eventType: event.eventType,
@@ -134,7 +134,8 @@ export const getEventDoc = async(eventId: string) => {
             description: event.description,
             requirements: event.requirements,
             funding: event.fundingNeeded,
-            status: event.status
+            status: event.status,
+            creatorId: event.creatorId.toString()
         };
         
         return transformedEvent;
@@ -177,5 +178,58 @@ export const getEventsByNameDocs = async(eventName: string) => {
         return transformedEvents;
     }catch(err){
         throw new Error(`Error while trying to fetch data from database ${err}` );
+    }
+}
+
+export const getUnapprovedEventsDocs = async() => {
+    try{
+        const events = await Event.find({is_approved: false});
+
+
+        const transformedEvents: EventDto[] = events.map(event => ({
+            _id: event._id.toString(),
+            eventName: event.eventName,
+            eventType: event.eventType,
+            date: formatDateRange(event.startDate, event.endDate),
+            address: event.address,
+            description: event.description,
+            requirements: event.requirements,
+            funding: event.fundingNeeded,
+            status: event.status,
+            creatorId: event.creatorId.toString()
+        
+        }));
+
+        return transformedEvents;
+    }catch(err){
+        throw new Error(`Error while trying to fetch data from database ${err}`);
+    }
+}
+
+export const deleteEventDoc = async(eventId: string) => {
+    try{    
+        const event = await Event.findOneAndDelete({
+           _id: eventId
+        });
+        if(!event){
+            throw new Error(`No event found with ${eventId}`)
+        }
+    }catch(err){
+        throw new Error(`Error while trying to fetch data from database ${err}`);
+    }
+
+}
+
+export const approveEventDoc = async(eventId: string) => {
+    try{
+        const updated = await Event.findOneAndUpdate(
+        {_id: eventId},
+        { is_approved: true },
+        );
+        if(!updated){
+            throw new Error(`No event found with id: ${eventId}`);
+        }
+    }catch(err){
+        throw new Error(`Error while trying to fetch data from database ${err}`);
     }
 }

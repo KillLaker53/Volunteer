@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EventPageDto, UserDto } from "types-api-volunteer/src";
+import { EventDto, UserDto } from "types-api-volunteer/src";
 import "./EventContribution.css";
 import { useNavigate } from "react-router-dom";
 import { signUpForEvent } from "../../api/EventApi";
@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { DecodedToken } from "../../library/types";
 
 interface EventContributionProps {
-  event: EventPageDto;
+  event: EventDto;
   isLoggedIn: boolean;
 }
 

@@ -2,10 +2,10 @@ import React from "react";
 import './EventDetails.css';
 import EventContribution from "./EventContribution";
 import EventDescription from "./EventDescription";
-import { EventPageDto } from "types-api-volunteer/src";
+import { EventDto } from "types-api-volunteer/src";
 
 interface EventDetailsProps{
-    event: EventPageDto;
+    event: EventDto;
     isLoggedIn: boolean;
 }
 

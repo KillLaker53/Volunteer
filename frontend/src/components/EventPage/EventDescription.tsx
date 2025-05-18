@@ -1,10 +1,10 @@
 import React from "react";
 import { eventDescriptionDate, eventDescriptionLocation } from "../../library/constants";
 import './EventDescription.css';
-import { EventPageDto } from "types-api-volunteer/src";
+import { EventDto } from "types-api-volunteer/src";
 
 interface EventDescriptionProps {
-    event: EventPageDto;
+    event: EventDto;
 
 }
 

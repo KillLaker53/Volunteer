@@ -1,9 +1,9 @@
 import express from 'express';
-import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProfile, updateProfilePhone, updateProfileRole } from './controllers/users.controller';
+import { getUser, getUsers, loginUser, registerUser, sendCertificate, updateProfile, updateProfileRole } from './controllers/users.controller';
 import { validateUserFields, validateLoginFields, checkIfUserExists, validateJwtToken, validateUserCredentials, validateAdminRole } from './middleware/validate.user';
 import { validateEventFields, checkIfEventExists, validateEventIsActive, validateEventIsFinished } from './middleware/validate.event';
 import { handleValidationResult } from './middleware/handle.validation.result';
-import { addVolunteerToEvent, createEvent, getEvent, removeVolunteerFromEvent, getEventsHomepage, getUserEventDetails, getEventsByName } from './controllers/events.controller';
+import { addVolunteerToEvent, createEvent, getEvent, removeVolunteerFromEvent, getEventsHomepage, getUserEventDetails, getEventsByName, getUnapprovedEvents, deleteEvent, approveEvent } from './controllers/events.controller';
 import { makeDonation, getUserDonationDetails } from './controllers/donations.controller';
 
 const routes = express.Router();
@@ -19,6 +19,8 @@ routes.get('/api/users', getUsers);
 routes.post('/api/events', validateJwtToken, validateEventFields, handleValidationResult, checkIfEventExists, createEvent);
 
 routes.get('/api/events/search', getEventsByName);
+
+routes.get('/api/events/admin', getUnapprovedEvents);
 
 routes.get('/api/events/:eventId', getEvent);
 
@@ -36,12 +38,13 @@ routes.post('/api/donate', validateJwtToken, makeDonation);
 
 routes.get('/api/donations', validateJwtToken, getUserDonationDetails);
 
-
-
 routes.patch('/api/users/:userId/role', validateAdminRole, updateProfileRole);
 
-routes.patch('/api/events/:eventId/approval', validateAdminRole);
+routes.patch('/api/events/:eventId/approval', validateAdminRole, approveEvent);
 
-routes.patch('/api/users/update', validateJwtToken, updateProfile)
+routes.delete('/api/events/:eventId/rejection', validateAdminRole, deleteEvent);
+
+routes.patch('/api/users/update', validateJwtToken, updateProfile);
+
 
 export default routes;

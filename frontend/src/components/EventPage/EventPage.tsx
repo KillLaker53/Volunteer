@@ -4,7 +4,7 @@ import Header from '../Shared/Header';
 import { useParams } from 'react-router-dom';
 import EventPageTitle from './EventPageTitle';
 import EventDetails from './EventDetails';
-import { EventPageDto } from 'types-api-volunteer/src';
+import { EventDto } from 'types-api-volunteer/src';
 import { fetchEvent } from '../../api/EventApi';
 
 const EventPage = () => {
@@ -12,7 +12,7 @@ const EventPage = () => {
     const [doesEventExist, setDoesEventExist] = useState<boolean>(false);
     const { eventId } = useParams<{ eventId?: string }>();
 
-    const [event, setEvent] = useState<EventPageDto | null>(null);
+    const [event, setEvent] = useState<EventDto | null>(null);
     
     useEffect(() => {
         const fetchAndSetEvent = async () => {

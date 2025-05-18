@@ -22,7 +22,7 @@
     "os-utils": "^0.0.14",
     "pdfkit": "^0.16.0",
     "stripe": "^17.5.0",
-    "types-api-volunteer": "^1.0.16"
+    "types-api-volunteer": "^1.0.18"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

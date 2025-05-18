@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { IEvent } from '../models/events';
-import { addUserToEventHistory, createEventDoc, getAllEventsDocs, getEventDoc, getEventsByNameDocs, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
+import { addUserToEventHistory, approveEventDoc, createEventDoc, deleteEventDoc, getAllEventsDocs, getEventDoc, getEventsByNameDocs, getUnapprovedEventsDocs, getUserEventsDocs, removeUserFromEvent } from '../services/events.service';
 import { geocodeLocation } from '../library/utils';
 import { Location, Status} from '../library/types';
 import { addEventToUserHistory, getUserEvents, notifyUsers } from '../services/user.service';
-import { UserEventDto } from 'types-api-volunteer/src';
+import { EventDto, UserEventDto } from 'types-api-volunteer/src';
 
 export const createEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
@@ -111,8 +111,7 @@ export const getEventsByName = async (req: Request, res: Response, next: NextFun
             res.status(404).json({ message: "No events found" });
             return;
         }
-        console.log(events);
-
+        
         res.status(200).json(events);
         return;
     } catch (err) {
@@ -121,3 +120,48 @@ export const getEventsByName = async (req: Request, res: Response, next: NextFun
         return;
     }
 };
+
+export const getUnapprovedEvents = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        
+        const events: EventDto[] = await getUnapprovedEventsDocs();
+        if(!events){
+            res.status(404).json({message: "No events found"});
+            return;
+        }
+        res.status(200).json(events);
+        return;
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: "An internal server error occurred"});
+        return;
+    }
+}
+
+export const deleteEvent = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const eventId = req.params.eventId;
+        await deleteEventDoc(eventId);
+        
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: 'An internal server error occurred'});
+        return;
+    }
+    
+}
+
+export const approveEvent = async(req: Request, res:Response, next: NextFunction) => {
+    try{
+        const eventId = req.params.eventId;
+        if(!eventId){
+            res.status(400).json({message: "Event Id not provided"});
+        }
+        await approveEventDoc(eventId);
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message: 'An internal server error occurred'});
+        return;
+    }
+
+}

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './AdminPage.css';
 import UserRolesPanel from './UserRolesPanel';
 import EventApprovalPanel from './EventsApprovalPanel';
-import { EventPageDto, UserDto } from 'types-api-volunteer/src';
+import { EventDto, UserDto } from 'types-api-volunteer/src';
 import { fetchUsers } from '../../api/UserApi';
 import { useNavigate } from 'react-router-dom';
-import { fetchUnapprovedEvents } from '../../api/EventApi';
+import { fetchAdminEvents, fetchUnapprovedEvents } from '../../api/EventApi';
 import AdminHeader from './AdminHeader';
 
 interface AdminPageProps {
@@ -15,7 +15,7 @@ const AdminPage: React.FC<AdminPageProps> = () => {
     const navigate = useNavigate();
     const [activePanel, setActivePanel] = useState<'users' | 'events'>('users');
     const [users, setUsers] = useState<UserDto[]>();
-    const [events, setEvents] = useState<EventPageDto[]>();
+    const [events, setEvents] = useState<EventDto[]>();
     const [token, setToken] = useState<string>('');
 
     useEffect(() => {
@@ -29,7 +29,19 @@ const AdminPage: React.FC<AdminPageProps> = () => {
             }
         }
 
+        const fetchAndSetEvents = async() => {
+            try{
+                const events: EventDto[] | undefined = await fetchAdminEvents();
+                setEvents(events);
+                console.log(events);
+            }catch(err){
+                console.error(err);
+            }
+        }
+
         fetchAndSetUsers();
+        fetchAndSetEvents();
+        console.log(events);
         const token: string | null = localStorage.getItem('token');
         if(!token){
             navigate('/login');
@@ -44,7 +56,7 @@ const AdminPage: React.FC<AdminPageProps> = () => {
             <AdminHeader activePanel={activePanel} setActivePanel={setActivePanel}/>
             <div className="admin-content-container">
                 <div className="admin-main-content">
-                    { activePanel === 'users' ? <UserRolesPanel token={token} users={users}/> : <EventApprovalPanel events={events} />
+                    { activePanel === 'users' ? <UserRolesPanel token={token} users={users}/> : <EventApprovalPanel token={token} events={events} />
 
                     } 
                 </div>

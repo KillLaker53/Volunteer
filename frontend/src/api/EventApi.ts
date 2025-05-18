@@ -1,4 +1,4 @@
-import { SidebarEventDto, EventLocationDto, EventPageDto, UserEventDto } from 'types-api-volunteer/src/index';
+import { SidebarEventDto, EventLocationDto, EventDto, UserEventDto } from 'types-api-volunteer/src/index';
 import { baseUrl } from '../library/constants';
 
 export const fetchEvents = async() => {
@@ -41,7 +41,7 @@ export const fetchEvent = async(eventId: string) => {
             throw new Error(`Http error with status ${response.status}`);
         }
         
-        const event: EventPageDto = await response.json();
+        const event: EventDto = await response.json();
         return event;
 
     }catch(error){
@@ -153,3 +153,64 @@ export const filterEventsByName = async (eventName: string) => {
         console.error(err);
     }
 };
+
+
+export const fetchAdminEvents = async() => {
+    try{
+
+        const response = await fetch(`${baseUrl}/api/events/admin`, {
+            method: 'GET',
+            headers: {
+                'Content-Type' : 'application/json',
+            }
+        })
+
+        if(!response.ok) {
+            const errorMessage = await response.json();
+            console.error(errorMessage);
+            throw new Error(errorMessage.message || 'Error fetching events');
+        }   
+        const events: EventDto[] = await response.json();
+        return events;
+    }catch(err){
+        console.error(err);
+    }
+}
+
+export const rejectEvent = async(token: string, eventId: string) => {
+    try{
+        const response = await fetch(`${baseUrl}/api/events/${eventId}/rejection`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error rejecting event');
+        }
+        
+    }catch(err){
+        console.error(err);
+    }
+}
+
+export const approveEvent = async(token: string, eventId: string) => {
+    try{
+        const response = await fetch(`${baseUrl}/api/events/${eventId}/approval`,{
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        if(!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error approving event' );
+        }
+
+    }catch(err){
+        console.error(err);
+    }
+}
