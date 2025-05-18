@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { body } from 'express-validator';
-import { Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Event, IEvent} from '../models/events';
 import { EventType, Status } from '../library/types';
 
@@ -47,7 +47,7 @@ export const validateEventIsActive = async(req: Request, res: Response, next: Ne
     try{
         const event = await Event.findOne({_id: req.body.eventId});
         if(!event){
-            res.status(400).json({message: "Event doesn't exist"});
+            res.status(404).json({message: "Event doesn't exist"});
             return;
         }
 
@@ -101,3 +101,28 @@ const validateEndDate = (startDate: Date, endDate: Date) => {
     }
     return true;
 }
+
+
+export const validateAllEventsActive = async (events: HydratedDocument<IEvent>[]) => {
+  const now = new Date();
+
+  const processed = await Promise.all(
+    events.map(async (event) => {
+      if (event.endDate && now > event.endDate) {
+        if (event.status !== Status.Finished) {
+          event.status = Status.Finished;
+          await event.save();
+        }
+        return null;
+      }
+
+      if (event.status !== Status.On_Going) {
+        event.status = Status.On_Going;
+        await event.save();
+      }
+      return event;               
+    })
+  );
+
+  return processed.filter((e): e is HydratedDocument<IEvent> => e !== null);
+};

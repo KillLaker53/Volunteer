@@ -4,6 +4,7 @@ import { ObjectId, Types } from 'mongoose';
 import { Location } from '../library/types';
 import { SidebarEventDto, EventDto, UserEventDto } from 'types-api-volunteer/src/index';
 import { formatDateRange } from '../library/utils';
+import { validateAllEventsActive } from '../middleware/validate.event';
 
 export const createEventDoc = async(event: IEvent) => {
     try{
@@ -74,8 +75,8 @@ export const getAllEventsDocs = async() => {
     try {
         const filter = {is_approved: true};
         const events = await Event.find(filter);
-        
-        const transformedEvents: SidebarEventDto[]  = events.map(event => ({
+        const validEvents = await validateAllEventsActive(events);
+        const transformedEvents: SidebarEventDto[]  = validEvents.map(event => ({
             _id: event.id,
             eventName: event.eventName,
             eventType: event.eventType,
