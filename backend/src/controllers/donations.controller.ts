@@ -15,7 +15,10 @@ export const makeDonation = async(req: Request, res: Response, next: NextFunctio
     const eventId = req.body.eventId;
     const userId = res.locals.token.id;
     const donationAmount = req.body.amount;
-    console.log(donationAmount)
+    if(!eventId || !donationAmount){
+        res.status(400).json({message: "Invalid make donation request"});
+    }
+
     const session = await stripe.checkout.sessions.create({
         line_items: [{
             price_data: {
@@ -40,7 +43,7 @@ export const makeDonation = async(req: Request, res: Response, next: NextFunctio
     }
     const createdDonation = await createDonationDoc(donationData);
 
-    res.status(200).json(session.url);
+    res.status(201).json(session.url);
     }catch(err){
         res.status(500).json({message: "Internal server error"});
     }
@@ -59,7 +62,7 @@ export const getUserDonationDetails = async(req: Request, res: Response, next: N
             eventName: eventMap.get(donation.event.toString()) || 'Unknown Event',
         }));
 
-        res.status(201).json(transformedUserDonations);
+        res.status(200).json(transformedUserDonations);
     }catch(err){
         res.status(500).json({message: "Internal server error"});
     }

@@ -11,7 +11,7 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
         const address = req.body.address;
         const location: Location = await geocodeLocation(address);
         const creatorId = res.locals.token.id;
-
+        
         const eventData: IEvent = {
             creatorId: creatorId,
             eventName: req.body.eventName,
@@ -40,6 +40,9 @@ export const addVolunteerToEvent = async(req: Request, res: Response, next: Next
     try{
         const volunteerId = res.locals.token.id;
         const eventId = req.body.eventId; 
+        if(!volunteerId || !eventId){
+            res.status(400).json({message: "Invalid add volunteer to event request"});
+        }
         const updatedEvent = await addUserToEventHistory(volunteerId, eventId);
         addEventToUserHistory(volunteerId, eventId);
         res.status(201).json(updatedEvent);
@@ -55,6 +58,9 @@ export const removeVolunteerFromEvent = async(req: Request, res: Response, next:
     try{
         const volunteerId = req.body.volunteerId;
         const eventId = req.params.eventId;
+        if(!volunteerId || !eventId){
+            res.status(400).json({message: "Invalid remove volunteer from event request"});
+        }
         const updatedEvent = await removeUserFromEvent(volunteerId, eventId);
         res.status(201).json(updatedEvent);
         return;
@@ -76,6 +82,9 @@ export const getEventsHomepage = async(req: Request, res: Response, next: NextFu
 export const getUserEventDetails = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userId = req.query.userId as string;
+        if(!userId){
+            res.status(400).json({message: "Invalid get user events request"});
+        }
         const eventIds = await getUserEvents(userId);
         const events: UserEventDto[] = await getUserEventsDocs(eventIds);
         res.status(200).json(events);
@@ -103,6 +112,10 @@ export const getEvent = async(req: Request, res: Response, next: NextFunction) =
 export const getEventsByName = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const eventName: string | undefined = req.query.eventName as string | undefined;
+        if(!eventName){
+            res.status(400).json({message: "Invalid get event request"});
+            return;
+        }
         const events = eventName
             ? await getEventsByNameDocs(eventName)
             : await getAllEventsDocs();
@@ -141,8 +154,12 @@ export const getUnapprovedEvents = async(req: Request, res: Response, next: Next
 export const deleteEvent = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const eventId = req.params.eventId;
+        if(!eventId){
+            res.status(400).json({message: "Invalid delete event request"});
+        }
         await deleteEventDoc(eventId);
-        
+        res.status(200);
+        return;
     }catch(err){
         console.error(err);
         res.status(500).json({message: 'An internal server error occurred'});
@@ -158,6 +175,8 @@ export const approveEvent = async(req: Request, res:Response, next: NextFunction
             res.status(400).json({message: "Event Id not provided"});
         }
         await approveEventDoc(eventId);
+        res.status(200);
+        return;
     }catch(err){
         console.error(err);
         res.status(500).json({message: 'An internal server error occurred'});

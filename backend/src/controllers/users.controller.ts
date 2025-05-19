@@ -45,7 +45,6 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
 export const loginUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        
         const user = res.locals.user;
         const token = await signJwt(user._id, user.email, user.role);
         
@@ -77,11 +76,11 @@ export const getUser = async(req: Request, res: Response, next: NextFunction) =>
         const userId = req.params.userId;
         
         if(!userId){
-            res.status(404).json({message: "Missing required query parameter"});
+            res.status(400).json({message: "Missing required query parameter"});
             return;
         }
         const user: UserDto = await getUserDoc(userId);
-        res.status(201).json(user);
+        res.status(200).json(user);
         return;
     }catch(err){
         res.status(500).json({message: "An internal server error has occurred"});
@@ -93,12 +92,17 @@ export const sendCertificate = async(req: Request, res: Response, next: NextFunc
     try{
         const userId = res.locals.token.id;
         const eventId = req.body.eventId;
+        if(!userId || !eventId){
+            res.status(400).json({message: "Invaid send certificate request"})
+        }
+
         const user = await getUserDoc(userId);
         const event = await getEventDoc(eventId);
         const pdfCertificate = await generateCertificate(user.firstName, user.lastName, event.eventName, event.date);
         
         await sendCertificateToEmail(user.email, user.firstName, user.lastName, pdfCertificate);
         res.status(201).json({message: "Successfully sent certificate"});
+        return;
     }catch(err){
         console.error(err);
         res.status(500).json({message: "An internal server error has occurred"});
@@ -116,7 +120,7 @@ export const updateProfile = async(req: Request, res: Response, next: NextFuncti
         }
 
         await updateProfileField(userId, updates);
-        res.status(200).json({message: "Successfully updated email"});
+        res.status(201).json({message: "Successfully updated email"});
         return;
     }catch(err){
         console.error(err);
@@ -130,10 +134,16 @@ export const updateProfileRole = async(req: Request, res: Response, next: NextFu
     try{
         const userId = req.body.userId;
         const newRole = req.body.newRole;
+        if(!userId || !newRole){
+            res.status(400).json({message: "Invalid update role request"});
+        }
+
         await updateProfileRoleDoc(userId, newRole);
-        res.status(200).json({message: "User role updated successfully"});
+        res.status(201).json({message: "User role updated successfully"});
+        return;
     }catch(err){
         console.error(err);
         res.status(500).json({message: "An internal error has occurred"});
+        return;
     }
 }

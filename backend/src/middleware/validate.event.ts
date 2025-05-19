@@ -30,9 +30,8 @@ export const checkIfEventExists = async(req: Request, res: Response, next: NextF
     try{
         const eventName = req.body.eventName;
         const event: IEvent | null= await Event.findOne({eventName: eventName});
-        console.log(event);
         if(event != null){
-            res.status(400).json({message: "This event already exists"});
+            res.status(409).json({message: "This event already exists"});
             return;
         }
 
@@ -72,14 +71,14 @@ export const validateEventIsFinished = async(req: Request, res: Response, next: 
     try{
         const event = await Event.findOne({_id: req.query.eventId as string});
         if(!event){
-            res.status(400).json({message: "Event doesn't exist"});
+            res.status(404).json({message: "Event doesn't exist"});
             return;
         }
 
         if(event.status === Status.Finished){
             next();
         } else {
-            res.status(400).json({message: "Event hasn't finished yet"});
+            res.status(403).json({message: "Event hasn't finished yet"});
         }
 
     }catch(err){

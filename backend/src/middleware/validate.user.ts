@@ -25,7 +25,7 @@ export const checkIfUserExists = async(req:Request, res: Response, next: NextFun
     try{
         const user: IUser | null = await User.findOne({email});
         if(user){
-            res.status(400).json({message: "A user with this email already exists"});
+            res.status(409).json({message: "A user with this email already exists"});
         }
     }catch(err){
         res.status(500).json({message: "An error occurred while checking if the user exists"});
@@ -67,7 +67,7 @@ export const validateAdminRole = async(req: Request, res: Response, next: NextFu
         }
         const decodedToken: DecodedToken = jwt.verify(token, SECRET_KEY) as DecodedToken;
         if(decodedToken.role !== "admin"){
-            throw new Error("Access denied. User's role is not sufficient to try this action");
+            res.status(403).json({message: "Only admins can perform this action"});
         }
         
         next();
@@ -83,7 +83,7 @@ export const validateUserCredentials = async(req: Request, res: Response, next: 
         const user = await getUserByEmail(email);
         
         if(!user || !(await validatePassword(password, user.password))){
-            res.status(400).json({message:"Wrong password or email"});
+            res.status(401).json({message:"Wrong password or email"});
             return;
         }
         res.locals.user = user;
