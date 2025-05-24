@@ -7,7 +7,7 @@ import { UserDonationDto } from 'types-api-volunteer/src';
 import { getDonationEventDocs } from '../services/events.service';
 
 const stripe = new Stripe(STRIPE_SECRET, {
-    apiVersion: '2024-12-18.acacia',
+    apiVersion: '2025-02-24.acacia',
 });
 
 export const makeDonation = async(req: Request, res: Response, next: NextFunction) => {
