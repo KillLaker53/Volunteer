@@ -230,6 +230,7 @@ export const approveEventDoc = async(eventId: string) => {
         if(!updated){
             throw new Error(`No event found with id: ${eventId}`);
         }
+        return updated;
     }catch(err){
         throw new Error(`Error while trying to fetch data from database ${err}`);
     }

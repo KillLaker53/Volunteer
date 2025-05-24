@@ -2,11 +2,20 @@ import { Location } from "./types";
 import { NODEMAILER_EMAIL, NODEMAILER_PASSWORD, OPENCAGE_API_KEY, SECRET_KEY } from "./constants";
 import OpenCage  from 'opencage-api-client';
 import PDFDocument from 'pdfkit';
-import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken'
 import { IEvent } from "../models/events";
-import { UserDto } from "types-api-volunteer/src";
 import mongoose, { ObjectId } from "mongoose";
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+        host:'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: NODEMAILER_EMAIL,
+            pass: NODEMAILER_PASSWORD,
+        }
+});
 
 
 export const geocodeLocation = async(address: string):Promise<Location> => {
@@ -84,16 +93,6 @@ export const sendCertificateToEmail = async(
     pdfCertificate: Buffer
 ) => {
 
-    const transporter = nodemailer.createTransport({
-        host:'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: NODEMAILER_EMAIL,
-            pass: NODEMAILER_PASSWORD,
-        }
-    });
-    console.log(userEmail);
     const mailOptions = {
         from: NODEMAILER_EMAIL,
         to: userEmail,
@@ -122,5 +121,15 @@ export const signJwt = async(userId: mongoose.Types.ObjectId, userEmail: string,
 }
 
 export const sendEventNotification = async(event: IEvent, userEmail: string) => {
-    
+    try{
+        const mailOptions = {
+            from: NODEMAILER_EMAIL,
+            to: userEmail,
+            subject: 'New Event',
+            text: `We would like to inform you about a new event ${event.eventName} at ${event.address}. If you would like to contribute to this event please visit the site`
+        }
+        await transporter.sendMail(mailOptions);
+    }catch(err){
+        throw new Error('Error trying to send email');
+    }
 }

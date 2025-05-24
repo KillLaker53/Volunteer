@@ -11,7 +11,7 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
         const address = req.body.address;
         const location: Location = await geocodeLocation(address);
         const creatorId = res.locals.token.id;
-        
+
         const eventData: IEvent = {
             creatorId: creatorId,
             eventName: req.body.eventName,
@@ -28,7 +28,6 @@ export const createEvent = async(req: Request, res: Response, next: NextFunction
             is_approved: false,
         }   
         const createdEvent: IEvent = await createEventDoc(eventData);
-        notifyUsers(createdEvent);
         res.status(201).json(createdEvent);
         return;
     }catch (err){
@@ -174,8 +173,10 @@ export const approveEvent = async(req: Request, res:Response, next: NextFunction
         if(!eventId){
             res.status(400).json({message: "Event Id not provided"});
         }
-        await approveEventDoc(eventId);
-        res.status(200);
+        const event = await approveEventDoc(eventId);
+        notifyUsers(event);
+     
+        res.status(200);    
         return;
     }catch(err){
         console.error(err);
