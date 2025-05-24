@@ -20,6 +20,27 @@
     border: 3px solid lightgrey;
 }
 
+.create-event-input-box-date {
+    position: relative;
+    margin-left: 5%;
+    border-radius: 10px;
+    padding: 10px 15px;
+    border: 1.5px solid #ccc;        
+    background-color: #f9f9f9;       
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); 
+    font-size: 16px;
+    color: #333;
+    width: fit-content;              
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.create-event-input-box-date:hover,
+.create-event-input-box-date:focus-within {
+    border-color: orange;
+    box-shadow: 0 0 8px rgba(63, 81, 181, 0.5);
+    background-color: #fff;
+}
 
 .create-event-input-box-description {
     overflow-y: auto;

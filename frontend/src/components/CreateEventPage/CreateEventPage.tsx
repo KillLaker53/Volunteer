@@ -40,8 +40,8 @@ const CreateEventPage = () => {
                     <InputBox type='default' title="Address" setValue={setEventAddress} placeHolder="Enter the address of the event"/>
                     <InputBox type='slider' title="Event Type" setValue={setEventType} />
                     <InputBox type='description' title="Description" setValue={setEventDescription} placeHolder="Enter the description of the event"/>
-                    <InputBox type='date' title="Start Date" setValue={setEventStartDate} placeHolder="Enter the date in format: YYYY-MM-DD, HH:MM"/>
-                    <InputBox type='date' title="End date" setValue={setEventEndDate} placeHolder="Enter the estimated end date in format: YYYY-MM-DD, HH:MM"/>
+                    <InputBox type='date' title="Start Date" value={eventStartDate} setValue={setEventStartDate} placeHolder="Enter the date in format: YYYY-MM-DD"/>
+                    <InputBox type='date' title="End date" value={eventEndDate} setValue={setEventEndDate} placeHolder="Enter the estimated end date in format: YYYY-MM-DD, HH:MM"/>
                     <InputBox type='default' title="Funding" setValue={setEventFunding} placeHolder="Submit a goal funding"/>
                     <InputBox type='default' title='Requirements' setValue={setEventRequirements} placeHolder="Enter" />
                     <button className='create-event-submit-button' onClick={handleOnSubmit}>

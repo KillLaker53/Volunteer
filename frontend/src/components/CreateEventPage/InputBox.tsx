@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-
+import Datetime from 'react-datetime';
 import './InputBox.css';
-
+import "react-datetime/css/react-datetime.css";
 interface InputBoxProps {
     type?: string
     title?: string;
+    value?: string;
     setValue: (arg0: string) => void;
     placeHolder?: string
 }
@@ -18,6 +19,9 @@ const InputBox: React.FC<InputBoxProps> = ({type, title, setValue, placeHolder})
         setValue(option); 
     };
 
+    const handleDateSelect = (date: string) => {
+        setValue(date);
+    }
     
     return(
         <>
@@ -41,12 +45,19 @@ const InputBox: React.FC<InputBoxProps> = ({type, title, setValue, placeHolder})
                     </div>
                 ))}
             </div>
-            ) :  (
+            ) : type==='date' ? (
+                <Datetime
+                dateFormat='YYYY-MM-DD'
+                timeFormat= 'HH:mm'
+                locale='bg'
+                onChange={(value) => handleDateSelect(value.toLocaleString())}
+                className="create-event-input-box-date"
+                />
+            ) : (
                 <input 
                 placeholder={placeHolder}
                 onChange={(e) => setValue(e.target.value)} 
                 className='create-event-input-box'/>
-        
             )   
             }  
         </>   
