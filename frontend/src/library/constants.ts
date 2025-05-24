@@ -29,4 +29,4 @@ export const adminIcon = require("../images/adminIcon.png");
 
 export const roleOptions = ["volunteer", "organization", "admin"] as const;
 
-export const baseUrl = "http://localhost:5000";
+export const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";

@@ -1,10 +1,10 @@
 import { SidebarEventDto, EventLocationDto, EventDto, UserEventDto } from 'types-api-volunteer/src/index';
-import { baseUrl } from '../library/constants';
+import { BASE_URL } from '../library/constants';
 
 export const fetchEvents = async() => {
     try{
    
-        const response = await fetch(`${baseUrl}/api/homepage/events`);
+        const response = await fetch(`${BASE_URL}/api/homepage/events`);
         if(!response.ok){
             throw new Error('Failed to fetch events');
         }
@@ -30,7 +30,7 @@ export const fetchEventCoordinates = (events: SidebarEventDto[]) => {
 export const fetchEvent = async(eventId: string) => {
     try{
      
-        const response = await fetch(`${baseUrl}/api/events/${encodeURIComponent(eventId)}`, {
+        const response = await fetch(`${BASE_URL}/api/events/${encodeURIComponent(eventId)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export const fetchEvent = async(eventId: string) => {
 
 export const signUpForEvent = async(token: string, eventId: string) => {
         
-        const response = await fetch(`${baseUrl}/api/events/${encodeURIComponent(eventId)}/volunteers`, 
+        const response = await fetch(`${BASE_URL}/api/events/${encodeURIComponent(eventId)}/volunteers`, 
             {
                 method:'POST',
                 headers: {
@@ -73,7 +73,7 @@ export const signUpForEvent = async(token: string, eventId: string) => {
 
 export const fetchUserEvents = async (token: string, userId: string): Promise<UserEventDto[]> => {
     try {
-        const response = await fetch(`${baseUrl}/api/users/me/events?userId=${userId}`, {
+        const response = await fetch(`${BASE_URL}/api/users/me/events?userId=${userId}`, {
             method: 'GET',
             headers: {
                 'Authorization' : `Bearer ${token}`,
@@ -106,12 +106,11 @@ export const createEvent = async(
     funding: string,
     ) => {
     try{
-        const startDate = new Date(startDateNotFormated.replace(', ', 'T')).toISOString();
-        
-        const endDate = new Date(endDateNotFormated.replace(', ', 'T')).toISOString();
+        const startDate = new Date(startDateNotFormated).toISOString();
+        const endDate = new Date(endDateNotFormated).toISOString();
         const requirements = requirementsString.split(',').map(requirement => requirement.trim());
         const fundingNeeded = Number(funding);
-        const response = await fetch(`${baseUrl}/api/events`, {
+        const response = await fetch(`${BASE_URL}/api/events`, {
             method: 'POST',
             headers: {
                 'Authorization' : `Bearer ${token}`,
@@ -130,14 +129,10 @@ export const createEvent = async(
     }
 }
 
-export const fetchUnapprovedEvents = async() => {
-
-}
-
 export const filterEventsByName = async (eventName: string) => {
     try {
         
-        const response = await fetch(`${baseUrl}/api/events/search?eventName=${encodeURIComponent(eventName)}`, {
+        const response = await fetch(`${BASE_URL}/api/events/search?eventName=${encodeURIComponent(eventName)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -158,7 +153,7 @@ export const filterEventsByName = async (eventName: string) => {
 export const fetchAdminEvents = async() => {
     try{
 
-        const response = await fetch(`${baseUrl}/api/events/admin`, {
+        const response = await fetch(`${BASE_URL}/api/events/admin`, {
             method: 'GET',
             headers: {
                 'Content-Type' : 'application/json',
@@ -179,7 +174,7 @@ export const fetchAdminEvents = async() => {
 
 export const rejectEvent = async(token: string, eventId: string) => {
     try{
-        const response = await fetch(`${baseUrl}/api/events/${eventId}/rejection`, {
+        const response = await fetch(`${BASE_URL}/api/events/${eventId}/rejection`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -190,7 +185,8 @@ export const rejectEvent = async(token: string, eventId: string) => {
             const errorData = await response.json();
             throw new Error(errorData.message || 'Error rejecting event');
         }
-        
+
+        return;
     }catch(err){
         console.error(err);
     }
@@ -198,7 +194,7 @@ export const rejectEvent = async(token: string, eventId: string) => {
 
 export const approveEvent = async(token: string, eventId: string) => {
     try{
-        const response = await fetch(`${baseUrl}/api/events/${eventId}/approval`,{
+        const response = await fetch(`${BASE_URL}/api/events/${eventId}/approval`,{
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -209,6 +205,7 @@ export const approveEvent = async(token: string, eventId: string) => {
             const errorData = await response.json();
             throw new Error(errorData.message || 'Error approving event' );
         }
+        return;
 
     }catch(err){
         console.error(err);

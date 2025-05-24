@@ -1,8 +1,8 @@
 import { UserDonationDto } from "types-api-volunteer/src";
-import {baseUrl} from '../library/constants';
+import {BASE_URL} from '../library/constants';
 export const fetchStripeUrl = async(token: string, amount: number, eventId: string) => {
     
-    const response = await fetch(`${baseUrl}/api/donate`, {
+    const response = await fetch(`${BASE_URL}/api/donate`, {
         method: 'POST',
         headers: {
             'Authorization' : `Bearer ${token}`,
@@ -18,7 +18,7 @@ export const fetchStripeUrl = async(token: string, amount: number, eventId: stri
 }
 
 export const fetchUserDonations = async(token: string, userId: string) => {
-    const response = await fetch(`${baseUrl}/api/donations`, {
+    const response = await fetch(`${BASE_URL}/api/donations`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
